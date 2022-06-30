@@ -377,6 +377,20 @@ multiaddr = ">=0.0.7"
 requests = ">=2.11"
 
 [[package]]
+name = "isort"
+version = "5.10.1"
+description = "A Python utility / library to sort Python imports."
+category = "dev"
+optional = false
+python-versions = ">=3.6.1,<4.0"
+
+[package.extras]
+pipfile_deprecated_finder = ["pipreqs", "requirementslib"]
+requirements_deprecated_finder = ["pipreqs", "pip-api"]
+colors = ["colorama (>=0.4.3,<0.5.0)"]
+plugins = ["setuptools"]
+
+[[package]]
 name = "jsonschema"
 version = "4.6.1"
 description = "An implementation of JSON Schema validation for Python"
@@ -781,7 +795,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7.2"
-content-hash = "8fd901cb769f7fba4f2816f2d923601e21c85a698747678a462cc57d595849d2"
+content-hash = "6aa573c25b189a60d08057c9a710a3b24db47c517cca9fc5a74f84d8298f80c4"
 
 [metadata.files]
 aiohttp = [
@@ -1091,6 +1105,10 @@ iniconfig = [
 ipfshttpclient = [
     {file = "ipfshttpclient-0.8.0a2-py3-none-any.whl", hash = "sha256:ce6bac0e3963c4ced74d7eb6978125362bb05bbe219088ca48f369ce14d3cc39"},
     {file = "ipfshttpclient-0.8.0a2.tar.gz", hash = "sha256:0d80e95ee60b02c7d414e79bf81a36fc3c8fbab74265475c52f70b2620812135"},
+]
+isort = [
+    {file = "isort-5.10.1-py3-none-any.whl", hash = "sha256:6f62d78e2f89b4500b080fe3a81690850cd254227f27f75c3a0c491a1f351ba7"},
+    {file = "isort-5.10.1.tar.gz", hash = "sha256:e8443a5e7a020e9d7f97f1d7d9cd17c88bcb3bc7e218bf9cf5095fe550be2951"},
 ]
 jsonschema = [
     {file = "jsonschema-4.6.1-py3-none-any.whl", hash = "sha256:5eb781753403847fb320f05e9ab2191725b58c5e7f97f1bed63285ca423159bc"},
