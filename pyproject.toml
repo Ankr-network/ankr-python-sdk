@@ -1,9 +1,12 @@
 [tool.poetry]
-name = "ankr-python-sdk"
-version = "0.1.0"
+name = "ankr-sdk"
+version = "0.1.3"
 description = "Compact Python library for interacting with Ankr's Advanced APIs."
-authors = ["Roman Fasakhov <fasashen@gmail.com>"]
+authors = ["Roman Fasakhov <romanfasakhov@ankr.com>"]
 license = "MIT License"
+packages = [
+    { include = "ankr" },
+]
 
 [tool.poetry.dependencies]
 python = "^3.7.2"
@@ -20,25 +23,3 @@ isort = "^5.10.1"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
-
-[mypy]
-ignore_missing_imports = true
-warn_no_return = false
-check_untyped_defs = true
-warn_unused_ignores = true
-disallow_untyped_defs = true
-allow_redefinition = true
-follow_imports = "skip"
-exclude = "env|venv|venv.*|tests"
-no_strict_optional = true
-
-[mypy-tests]
-ignore_errors = true
-
-[flake8]
-max-complexity = 8
-max-annotations-complexity = 4
-max-line-length = 120
-max-function-length = 100
-exclude = ["env", "venv", "./tests/*"]
-per-file-ignores =["__init__.py: F401"]

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from ankr import AnkrAdvancedAPI, types
 
 
@@ -31,6 +33,24 @@ def test_get_logs():
     assert len(logs) == 18
     assert logs[0].address == "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
     assert logs[0].event.name == "Deposit"
+
+
+def test_get_blocks():
+    advanced_api = AnkrAdvancedAPI()
+    blocks = advanced_api.get_blocks(
+        blockchain=types.BlockchainName.ETH,
+        from_block=14500001,
+        to_block=14500001,
+        desc_order=True,
+        include_logs=True,
+        include_txs=True,
+        decode_logs=True,
+    )
+
+    assert len(blocks) == 1
+    assert blocks[0].transactions
+    assert len(blocks[0].transactions) == 99
+    assert len(blocks[0].transactions[6].logs) == 1
 
 
 def test_get_nfts():
