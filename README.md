@@ -18,7 +18,7 @@ from ankr import AnkrAdvancedAPI, types
 ankr_api = AnkrAdvancedAPI()
 ```
 
-####3. Use the sdk and call one of the supported methods
+#### 3. Use the sdk and call one of the supported methods
 
 ```python3
 from ankr.types import BlockchainName
