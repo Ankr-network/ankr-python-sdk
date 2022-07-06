@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ankr-sdk"
-version = "0.1.4"
+version = "0.2.0"
 description = "Compact Python library for interacting with Ankr's Advanced APIs."
 authors = ["Roman Fasakhov <romanfasakhov@ankr.com>"]
 license = "MIT License"
@@ -19,6 +19,7 @@ python = "^3.7.2"
 web3 = "^5.29.2"
 pydantic = "^1.9.1"
 pyhumps = "^3.7.2"
+typing-extensions = "^4.3.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.1.2"

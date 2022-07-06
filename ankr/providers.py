@@ -1,8 +1,9 @@
 from __future__ import annotations
 
-from typing import Any, Iterable, List, Optional, Protocol, Type, TypeVar, Union
+from typing import Any, Iterable, List, Optional, Type, TypeVar, Union
 
 from eth_typing import URI
+from typing_extensions import Protocol
 from web3 import HTTPProvider
 from web3.types import RPCEndpoint, RPCResponse
 
