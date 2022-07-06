@@ -8,7 +8,7 @@ import humps
 from pydantic import BaseModel
 
 
-class BlockchainName(str, enum.Enum):
+class Blockchain(str, enum.Enum):
     ETH = "eth"
     BSC = "bsc"
     POLYGON = "polygon"
@@ -18,12 +18,19 @@ class BlockchainName(str, enum.Enum):
     SYSCOIN = "syscoin"
 
 
+class NftContractType(str, enum.Enum):
+    ERC721 = "ERC721"
+    ERC1155 = "ERC1155"
+    UNDEFINED = "UNDEFINED"
+
+
 class BlockNumberName(str, enum.Enum):
     latest = "latest"
     earliest = "earliest"
 
 
-BlockchainNames = Union[BlockchainName, List[BlockchainName], str]
+BlockchainName = Union[Blockchain, str]
+BlockchainNames = Union[BlockchainName, List[BlockchainName]]
 BlockNumber = Union[int, str, BlockNumberName]
 AddressOrAddresses = Union[str, List[str]]
 Topics = Union[str, List[Union[str, List[str]]]]
@@ -94,7 +101,7 @@ class NftAttributes(RPCModel):
     image_url: str
     name: str
     description: str
-    contract_type: int
+    contract_type: NftContractType
     traits: Optional[List[Attribute]] = None
 
 
@@ -102,7 +109,7 @@ class NftMetadata(RPCModel):
     blockchain: BlockchainName
     contract_address: str
     token_id: str
-    contract_type: int
+    contract_type: NftContractType
 
 
 class GetNFTMetadataReply(RPCModel):
@@ -132,7 +139,7 @@ class GetAccountBalanceReply(RPCReplyPaginated):
 
 
 class GetAccountBalanceRequest(RPCRequestPaginated):
-    blockchain: Optional[Union[BlockchainName, List[BlockchainName]]]
+    blockchain: Optional[BlockchainNames]
     wallet_address: str
     page_token: Optional[str] = None
     page_size: Optional[int] = None
@@ -247,7 +254,7 @@ class GetLogsReply(RPCReplyPaginated):
 
 
 class GetLogsRequest(RPCRequestPaginated):
-    blockchain: Union[BlockchainName, List[BlockchainName]]
+    blockchain: BlockchainNames
     from_block: Optional[BlockNumber] = None
     to_block: Optional[BlockNumber] = None
     address: Optional[Union[str, List[str]]] = None
@@ -347,7 +354,7 @@ class GetBlocksReply(RPCModel):
 
 
 class GetTransactionsByHashRequest(RPCModel):
-    blockchain: Optional[Union[BlockchainName, List[BlockchainName]]]
+    blockchain: Optional[BlockchainNames]
     transaction_hash: str
     include_logs: Optional[bool] = None
     decode_logs: Optional[bool] = None

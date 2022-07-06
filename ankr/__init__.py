@@ -1,3 +1,4 @@
 from __future__ import annotations
 
-from ankr.advanced_api import AnkrAdvancedAPI
+from ankr.advanced_apis import AnkrAdvancedAPI
+from ankr.web3 import AnkrWeb3
