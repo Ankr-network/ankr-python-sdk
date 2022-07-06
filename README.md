@@ -134,7 +134,7 @@ holders = ankr_w3.token.get_token_holders(
 Get token holders count daily history.
 
 ````python3
-daily_holders_history = ankr_w3.token..get_token_holders_count_history(
+daily_holders_history = ankr_w3.token.get_token_holders_count_history(
     blockchain="bsc",
     contract_address="0xf307910A4c7bbc79691fD374889b36d8531B08e3",
     limit=10,  # last 10 days history
@@ -146,7 +146,7 @@ daily_holders_history = ankr_w3.token..get_token_holders_count_history(
 Get token holders count at the latest block.
 
 ````python3
-holders_count = ankr_w3.token..get_token_holders_count(
+holders_count = ankr_w3.token.get_token_holders_count(
     blockchain="bsc",
     contract_address="0xf307910A4c7bbc79691fD374889b36d8531B08e3",
 )
@@ -157,7 +157,7 @@ holders_count = ankr_w3.token..get_token_holders_count(
 Get account assets.
 
 ````python3
-assets = ankr_w3.token..get_account_balance(
+assets = ankr_w3.token.get_account_balance(
     wallet_address="0x77A859A53D4de24bBC0CC80dD93Fbe391Df45527",
     blockchain=["eth", "bsc"],
 )
