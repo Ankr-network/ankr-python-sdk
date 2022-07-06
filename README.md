@@ -27,7 +27,7 @@ bsc_block = ankr_w3.bsc.get_block("latest")
 polygon_block = ankr_w3.polygon.get_block("latest")
 ```
 
-#### Ankr NFT API: get all addresses' NFTs 
+#### Ankr NFT API 
 
 ```python3
 from ankr.types import Blockchain
@@ -42,14 +42,14 @@ nfts = ankr_w3.nft.get_nfts(
 )
 ```
 
-#### Ankr Token API: get all wallet's tokens on every supported chain
+#### Ankr Token API
 ```python3
 assets = ankr_w3.token.get_account_balance(
     wallet_address="0x77A859A53D4de24bBC0CC80dD93Fbe391Df45527"
 )
 ```
 
-#### Ankr Query API: search for logs without range limits
+#### Ankr Query API
 ```python3
 logs = ankr_w3.query.get_logs(
     blockchain="eth",
