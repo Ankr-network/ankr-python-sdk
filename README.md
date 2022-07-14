@@ -16,6 +16,9 @@ pip install ankr-sdk
 from ankr import AnkrWeb3
 
 ankr_w3 = AnkrWeb3()
+
+# Or, if you have an Ankr Protocol premium plan
+ankr_w3 = AnkrWeb3("YOUR-TOKEN")
 ```
 
 #### 3. Use the sdk and call one of the supported methods
