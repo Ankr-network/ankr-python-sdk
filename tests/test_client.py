@@ -98,6 +98,21 @@ def test_get_nft_metadata() -> None:
 
 
 @pytest.mark.webtest
+def test_get_nft_holders() -> None:
+    client = AnkrAdvancedAPI()
+    holders = list(
+        client.get_nft_holders(
+            blockchain="eth",
+            contract_address="0x4100670ee2f8aef6c47a4ed13c7f246e621228ec",
+            limit=10,
+        )
+    )
+
+    assert holders
+    assert len(holders) == 10
+
+
+@pytest.mark.webtest
 def test_get_transactions() -> None:
     client = AnkrAdvancedAPI()
     tx = client.get_transaction(
@@ -179,3 +194,26 @@ def test_get_account_balance() -> None:
 
     assert assets
     assert len(assets) > 0
+
+
+@pytest.mark.webtest
+def test_get_token_price() -> None:
+    client = AnkrAdvancedAPI()
+    price = client.get_token_price(
+        contract_address="0x8290333cef9e6d528dd5618fb97a76f268f3edd4",
+        blockchain="eth",
+    )
+
+    assert price
+    assert float(price) > 0
+
+
+@pytest.mark.webtest
+def test_get_token_price__no_price() -> None:
+    client = AnkrAdvancedAPI()
+    price = client.get_token_price(
+        contract_address="0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+        blockchain="eth",
+    )
+
+    assert price == "0"

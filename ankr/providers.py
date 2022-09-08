@@ -11,7 +11,7 @@ from ankr import types
 from ankr.exceptions import APIError
 
 TRequest = TypeVar("TRequest", bound=types.RPCModel)
-TReply = TypeVar("TReply", bound=types.RPCModel)
+TReply = TypeVar("TReply")
 TRequestPaginated = TypeVar("TRequestPaginated", bound=types.RPCRequestPaginated)
 TReplyPaginated = TypeVar("TReplyPaginated", bound=types.RPCReplyPaginated)
 

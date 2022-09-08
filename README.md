@@ -85,9 +85,11 @@ logs = ankr_w3.query.get_logs(
 
 - [`nft.get_nfts`](#get_nfts)
 - [`nft.get_nft_metadata`](#get_nft_metadata)
+- `nft.get_nft_holders`
 - [`token.get_token_holders`](#get_token_holders)
 - [`token.get_token_holders_count_history`](#get_token_holders_count_history)
 - [`token.get_token_holders_count`](#get_token_holders_count)
+- `token.get_token_price`
 - [`token.get_account_balance`](#get_account_balance)
 - [`query.get_logs`](#get_logs)
 - [`query.get_blocks`](#get_blocks)

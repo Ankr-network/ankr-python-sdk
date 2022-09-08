@@ -32,6 +32,7 @@ class BlockNumberName(str, enum.Enum):
 BlockchainName = Union[Blockchain, str]
 BlockchainNames = Union[BlockchainName, List[BlockchainName]]
 BlockNumber = Union[int, str, BlockNumberName]
+Address = str
 AddressOrAddresses = Union[str, List[str]]
 Topics = Union[str, List[Union[str, List[str]]]]
 
@@ -117,6 +118,18 @@ class GetNFTMetadataReply(RPCModel):
     attributes: Optional[NftAttributes] = None
 
 
+class GetNFTHoldersRequest(RPCRequestPaginated):
+    blockchain: BlockchainName
+    contract_address: Address
+    page_token: Optional[str] = None
+    page_size: Optional[int] = None
+
+
+class GetNFTHoldersReply(RPCReplyPaginated):
+    holders: List[Address]
+    next_page_token: Optional[str] = None
+
+
 class Balance(RPCModel):
     blockchain: str
     token_name: str
@@ -172,6 +185,17 @@ class GetTokenHoldersCountRequest(RPCRequestPaginated):
     contract_address: str
     page_token: Optional[str] = None
     page_size: Optional[int] = None
+
+
+class GetTokenPriceRequest(RPCModel):
+    blockchain: BlockchainName
+    contract_address: str
+
+
+class GetTokenPriceReply(RPCModel):
+    usd_price: str
+    blockchain: BlockchainName
+    contract_address: str
 
 
 class DailyHolderCount(RPCModel):
@@ -315,7 +339,7 @@ class Transaction(RPCModel):
     contract_address: Optional[str]
     cumulative_gas_used: str
     gas_used: str
-    logs: List[Log]
+    logs: Optional[List[Log]]
     logs_bloom: str
     transaction_hash: str
     hash: str

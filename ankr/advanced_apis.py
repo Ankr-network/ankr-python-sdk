@@ -164,6 +164,24 @@ class AnkrTokenAPI(AnkrMultichainAPI):
             raise APIError("no token holders count found")
         return reply.holder_count_history[0]
 
+    def get_token_price(
+        self,
+        blockchain: types.BlockchainName,
+        contract_address: str,
+        **kwargs: Any,
+    ) -> str:
+        reply = self.provider.call_method(
+            rpc="ankr_getTokenPrice",
+            request=types.GetTokenPriceRequest(
+                blockchain=blockchain,
+                contract_address=contract_address,
+                **kwargs,
+            ),
+            reply_type=types.GetTokenPriceReply,
+        )
+
+        return reply.usd_price
+
     def get_account_balance(
         self,
         wallet_address: str,
@@ -226,6 +244,26 @@ class AnkrNFTAPI(AnkrMultichainAPI):
                 **kwargs,
             ),
             types.GetNFTMetadataReply,
+        )
+
+    def get_nft_holders(
+        self,
+        blockchain: types.BlockchainName,
+        contract_address: str,
+        limit: Optional[int] = None,
+        **kwargs: Any,
+    ) -> Iterable[types.Address]:
+        return self.provider.call_method_paginated(
+            "ankr_getNFTHolders",
+            types.GetNFTHoldersRequest(
+                blockchain=blockchain,
+                contract_address=contract_address,
+                **kwargs,
+            ),
+            types.GetNFTHoldersReply,
+            iterable_name="holders",
+            iterable_type=types.Address,
+            limit=limit,
         )
 
 
