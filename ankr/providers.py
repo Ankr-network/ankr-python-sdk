@@ -68,8 +68,11 @@ class MultichainHTTPProvider(HTTPProvider):
                 return
             limit -= len(items)
 
-        yield from items
-
+        if items is None:
+            yield from []
+        else:
+            yield from items
+        
         if reply.next_page_token:
             request.page_token = reply.next_page_token
             yield from self.call_method_paginated(

@@ -175,9 +175,9 @@ class GetTokenHoldersReply(RPCReplyPaginated):
     blockchain: BlockchainName
     contract_address: str
     token_decimals: int
-    holders: List[HolderBalance]
+    holders: Union[None, List[HolderBalance]]
     holders_count: int
-    next_page_token: str
+    next_page_token: Optional[str] = None
 
 
 class GetTokenHoldersCountRequest(RPCRequestPaginated):
