@@ -15,7 +15,7 @@ packages = [{ include = "ankr" }]
 
 
 [tool.poetry.dependencies]
-python = "^3.11.2"
+python = "^3.7.2"
 web3 = "^6.0.0"
 pydantic = "^1.10.7"
 pyhumps = "^3.8.0"
