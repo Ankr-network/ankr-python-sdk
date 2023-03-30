@@ -175,7 +175,7 @@ class GetTokenHoldersReply(RPCReplyPaginated):
     blockchain: BlockchainName
     contract_address: str
     token_decimals: int
-    holders: List[HolderBalance]
+    holders: Optional[List[HolderBalance]]
     holders_count: int
     next_page_token: str
 
@@ -340,8 +340,6 @@ class Transaction(RPCModel):
     cumulative_gas_used: str
     gas_used: str
     logs: Optional[List[Log]]
-    logs_bloom: str
-    transaction_hash: str
     hash: str
     status: str
     blockchain: str

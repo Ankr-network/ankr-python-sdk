@@ -49,6 +49,7 @@ class MultichainHTTPProvider(HTTPProvider):
 
     def call_method_paginated(
         self,
+        *,
         rpc: str,
         request: TRequestPaginated,
         reply_type: Type[TReplyPaginated],
@@ -60,7 +61,7 @@ class MultichainHTTPProvider(HTTPProvider):
         response = self.make_request(RPCEndpoint(rpc), request_dict)
         reply = reply_type(**response["result"])
 
-        items: List[TReply] = getattr(reply, iterable_name, [])
+        items: List[TReply] = getattr(reply, iterable_name) or []
 
         if limit:
             if limit <= len(items):
@@ -73,12 +74,12 @@ class MultichainHTTPProvider(HTTPProvider):
         if reply.next_page_token:
             request.page_token = reply.next_page_token
             yield from self.call_method_paginated(
-                RPCEndpoint(rpc),
-                request,
-                reply_type,
-                iterable_name,
-                iterable_type,
-                limit,
+                rpc=RPCEndpoint(rpc),
+                request=request,
+                reply_type=reply_type,
+                iterable_name=iterable_name,
+                iterable_type=iterable_type,
+                limit=limit,
             )
 
 
@@ -96,7 +97,7 @@ def http_provider_constructor(url: str) -> TProviderConstructor:
     ) -> HTTPProvider:
         if api_key is None:
             api_key = ""
-        return HTTPProvider(url + api_key, request_kwargs)
+        return HTTPProvider(f"{url}/{api_key}", request_kwargs)
 
     return init
 

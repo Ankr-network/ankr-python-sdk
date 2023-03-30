@@ -58,6 +58,7 @@ def test_get_blocks() -> None:
     assert len(blocks) == 1
     assert blocks[0].transactions
     assert len(blocks[0].transactions) == 99
+    assert blocks[0].transactions[6].logs
     assert len(blocks[0].transactions[6].logs) == 1
 
 
@@ -124,8 +125,7 @@ def test_get_transactions() -> None:
 
     assert tx
     assert (
-        tx.transaction_hash
-        == "0x82c13aaac6f0b6471afb94a3a64ae89d45baa3608ad397621dbb0d847f51196f"
+        tx.hash == "0x82c13aaac6f0b6471afb94a3a64ae89d45baa3608ad397621dbb0d847f51196f"
     )
     assert tx.to_address == "0x98767abab06e45a181ab73ae4cd0fecd0fbd0cd0"
     assert tx.from_address == "0x64aa6f93e0e1f49ff4958990c40d4bf17dafc0eb"
@@ -146,6 +146,23 @@ def test_get_token_holders() -> None:
     )
 
     assert len(holders) == 10
+    assert holders[0].holder_address.startswith("0x")
+    assert "." in holders[0].balance
+    assert holders[0].balance_raw_integer.isnumeric()
+
+
+@pytest.mark.webtest
+def test_get_token_holders_pagination() -> None:
+    client = AnkrAdvancedAPI()
+    holders = list(
+        client.get_token_holders(
+            blockchain="bsc",
+            contract_address="0xf307910A4c7bbc79691fD374889b36d8531B08e3",
+            limit=None,
+        )
+    )
+
+    assert len(holders) > 1000
     assert holders[0].holder_address.startswith("0x")
     assert "." in holders[0].balance
     assert holders[0].balance_raw_integer.isnumeric()

@@ -29,8 +29,8 @@ class AnkrQueryAPI(AnkrMultichainAPI):
         **kwargs: Any,
     ) -> Iterable[types.Log]:
         for log in self.provider.call_method_paginated(
-            "ankr_getLogs",
-            types.GetLogsRequest(
+            rpc="ankr_getLogs",
+            request=types.GetLogsRequest(
                 blockchain=blockchain,
                 from_block=from_block,
                 to_block=to_block,
@@ -109,14 +109,13 @@ class AnkrTokenAPI(AnkrMultichainAPI):
         **kwargs: Any,
     ) -> Iterable[types.HolderBalance]:
         for holder in self.provider.call_method_paginated(
-            "ankr_getTokenHolders",
-            types.GetTokenHoldersRequest(
+            rpc="ankr_getTokenHolders",
+            request=types.GetTokenHoldersRequest(
                 blockchain=blockchain,
                 contract_address=contract_address,
-                reply_type=types.GetLogsReply,
                 **kwargs,
             ),
-            types.GetTokenHoldersReply,
+            reply_type=types.GetTokenHoldersReply,
             iterable_name="holders",
             iterable_type=types.HolderBalance,
             limit=limit,
@@ -131,13 +130,13 @@ class AnkrTokenAPI(AnkrMultichainAPI):
         **kwargs: Any,
     ) -> Iterable[types.DailyHolderCount]:
         for daily_holder_count in self.provider.call_method_paginated(
-            "ankr_getTokenHoldersCount",
-            types.GetTokenHoldersCountRequest(
+            rpc="ankr_getTokenHoldersCount",
+            request=types.GetTokenHoldersCountRequest(
                 blockchain=blockchain,
                 contract_address=contract_address,
                 **kwargs,
             ),
-            types.GetTokenHoldersCountReply,
+            reply_type=types.GetTokenHoldersCountReply,
             iterable_name="holder_count_history",
             iterable_type=types.DailyHolderCount,
             limit=limit,
@@ -214,14 +213,14 @@ class AnkrNFTAPI(AnkrMultichainAPI):
         **kwargs: Any,
     ) -> Iterable[types.Nft]:
         for nft in self.provider.call_method_paginated(
-            "ankr_getNFTsByOwner",
-            types.GetNFTsByOwnerRequest(
+            rpc="ankr_getNFTsByOwner",
+            request=types.GetNFTsByOwnerRequest(
                 blockchain=blockchain,
                 wallet_address=wallet_address,
                 filter=filter,
                 **kwargs,
             ),
-            types.GetNFTsByOwnerReply,
+            reply_type=types.GetNFTsByOwnerReply,
             iterable_name="assets",
             iterable_type=types.Nft,
             limit=limit,
@@ -254,13 +253,13 @@ class AnkrNFTAPI(AnkrMultichainAPI):
         **kwargs: Any,
     ) -> Iterable[types.Address]:
         return self.provider.call_method_paginated(
-            "ankr_getNFTHolders",
-            types.GetNFTHoldersRequest(
+            rpc="ankr_getNFTHolders",
+            request=types.GetNFTHoldersRequest(
                 blockchain=blockchain,
                 contract_address=contract_address,
                 **kwargs,
             ),
-            types.GetNFTHoldersReply,
+            reply_type=types.GetNFTHoldersReply,
             iterable_name="holders",
             iterable_type=types.Address,
             limit=limit,
