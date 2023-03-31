@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ankr-sdk"
-version = "0.2.2"
+version = "0.3.0"
 description = "Compact Python library for interacting with Ankr's Advanced APIs."
 authors = ["Roman Fasakhov <romanfasakhov@ankr.com>"]
 license = "MIT License"
