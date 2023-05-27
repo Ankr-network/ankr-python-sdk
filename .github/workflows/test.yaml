@@ -29,6 +29,8 @@ jobs:
           isort .
   test:
     needs: linting
+    env:
+      ANKR_API_KEY: ${{ secrets.ANKR_API_KEY }}
     strategy:
       fail-fast: true
       matrix:

@@ -22,12 +22,8 @@ from ankr.providers import (
 
 
 def test_provider_api_key() -> None:
-    provider = MultichainHTTPProvider()
-    provider_with_key = MultichainHTTPProvider("my-test-api-key")
-
-    assert provider.endpoint_uri == "https://rpc.ankr.com/multichain/"
     assert (
-        provider_with_key.endpoint_uri
+        MultichainHTTPProvider("my-test-api-key").endpoint_uri
         == "https://rpc.ankr.com/multichain/my-test-api-key"
     )
 

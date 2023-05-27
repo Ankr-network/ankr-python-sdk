@@ -12,12 +12,13 @@ pip install ankr-sdk
 
 #### 2. Initialize the SDK
 
+_Note: to use Advanced API for free starting from May 29th, 2023 you have to register on the platform._
+
+Get your individual endpoint here https://www.ankr.com/rpc/advanced-api and provide it to the `AnkrWeb3` class.
+
 ```python3
 from ankr import AnkrWeb3
 
-ankr_w3 = AnkrWeb3()
-
-# Or, if you have an Ankr Protocol premium plan
 ankr_w3 = AnkrWeb3("YOUR-TOKEN")
 ```
 
@@ -218,7 +219,6 @@ tx = ankr_w3.query.get_transaction(
 
 ### About API keys
 
-For now, Ankr is offering _free_ access to these APIs with no request limits i.e. you don't need an API key at this
-time.
+Ankr is offering _free_ access to Advanced API, however you have to register on Ankr platform to access it.
 
-Later on, these APIs will become a part of Ankr Protocol's [Premium Plan](https://www.ankr.com/protocol/plan/).
+Get your individual API Key here https://www.ankr.com/rpc/advanced-api.
