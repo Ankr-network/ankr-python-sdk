@@ -25,8 +25,8 @@ from ankr.web3 import AnkrWeb3
         "syscoin",
     ],
 )
-def test_ankr_web3(blockchain: str) -> None:
-    w3 = AnkrWeb3()
+def test_ankr_web3(blockchain: str, api_key: str) -> None:
+    w3 = AnkrWeb3(api_key)
 
     block = getattr(w3, blockchain).get_block("latest")
 

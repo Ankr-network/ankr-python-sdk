@@ -19,13 +19,12 @@ TReplyPaginated = TypeVar("TReplyPaginated", bound=types.RPCReplyPaginated)
 class MultichainHTTPProvider(HTTPProvider):
     def __init__(
         self,
-        api_key: str = "",
+        api_key: str,
         endpoint_uri: Optional[Union[URI, str]] = None,
         request_kwargs: Optional[Any] = None,
         session: Optional[Any] = None,
     ) -> None:
-        if endpoint_uri is None:
-            endpoint_uri = "https://rpc.ankr.com/multichain/"
+        endpoint_uri = endpoint_uri or "https://rpc.ankr.com/multichain/"
         super().__init__(endpoint_uri + api_key, request_kwargs, session)
 
     def make_request(self, method: RPCEndpoint, params: Any) -> RPCResponse:

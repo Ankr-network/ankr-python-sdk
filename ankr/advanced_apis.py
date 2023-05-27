@@ -10,10 +10,10 @@ from ankr.providers import MultichainHTTPProvider
 class AnkrMultichainAPI:
     def __init__(
         self,
-        api_key: Optional[str] = None,
+        api_key: str,
         endpoint_uri: Optional[str] = None,
     ) -> None:
-        self.provider = MultichainHTTPProvider(api_key or "", endpoint_uri)
+        self.provider = MultichainHTTPProvider(api_key, endpoint_uri)
 
 
 class AnkrQueryAPI(AnkrMultichainAPI):

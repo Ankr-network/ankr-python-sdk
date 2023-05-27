@@ -56,7 +56,7 @@ class AnkrWeb3(Web3, metaclass=_Web3NamedMeta):
 
     def __init__(
         self,
-        api_key: Optional[str] = None,
+        api_key: str,
         request_kwargs: Optional[Any] = None,
         middlewares: Optional[Sequence[Any]] = None,
         modules: Optional[Dict[str, Union[Type[Module], Sequence[Any]]]] = None,

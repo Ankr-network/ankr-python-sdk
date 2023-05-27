@@ -9,19 +9,14 @@ from ankr.types import Blockchain, NftContractType
 
 
 def test_client_api_key() -> None:
-    client = AnkrAdvancedAPI()
-    client_with_key = AnkrAdvancedAPI("my-test-api-key")
-
-    assert client.provider.endpoint_uri == "https://rpc.ankr.com/multichain/"
     assert (
-        client_with_key.provider.endpoint_uri
+        AnkrAdvancedAPI("my-test-api-key").provider.endpoint_uri
         == "https://rpc.ankr.com/multichain/my-test-api-key"
     )
 
 
 @pytest.mark.webtest
-def test_get_logs() -> None:
-    client = AnkrAdvancedAPI()
+def test_get_logs(client: AnkrAdvancedAPI) -> None:
     logs = list(
         client.get_logs(
             blockchain=Blockchain.ETH,
@@ -43,8 +38,7 @@ def test_get_logs() -> None:
 
 
 @pytest.mark.webtest
-def test_get_blocks() -> None:
-    client = AnkrAdvancedAPI()
+def test_get_blocks(client: AnkrAdvancedAPI) -> None:
     blocks = client.get_blocks(
         blockchain=Blockchain.ETH,
         from_block=14500001,
@@ -63,8 +57,7 @@ def test_get_blocks() -> None:
 
 
 @pytest.mark.webtest
-def test_get_nfts() -> None:
-    client = AnkrAdvancedAPI()
+def test_get_nfts(client: AnkrAdvancedAPI) -> None:
     nfts = list(
         client.get_nfts(
             blockchain=Blockchain.ETH,
@@ -83,8 +76,7 @@ def test_get_nfts() -> None:
 
 
 @pytest.mark.webtest
-def test_get_nft_metadata() -> None:
-    client = AnkrAdvancedAPI()
+def test_get_nft_metadata(client: AnkrAdvancedAPI) -> None:
     reply = client.get_nft_metadata(
         blockchain="eth",
         contract_address="0x4100670ee2f8aef6c47a4ed13c7f246e621228ec",
@@ -99,8 +91,7 @@ def test_get_nft_metadata() -> None:
 
 
 @pytest.mark.webtest
-def test_get_nft_holders() -> None:
-    client = AnkrAdvancedAPI()
+def test_get_nft_holders(client: AnkrAdvancedAPI) -> None:
     holders = list(
         client.get_nft_holders(
             blockchain="eth",
@@ -114,8 +105,7 @@ def test_get_nft_holders() -> None:
 
 
 @pytest.mark.webtest
-def test_get_transactions() -> None:
-    client = AnkrAdvancedAPI()
+def test_get_transactions(client: AnkrAdvancedAPI) -> None:
     tx = client.get_transaction(
         transaction_hash="0x82c13aaac6f0b6471afb94a3a64ae89d45baa3608ad397621dbb0d847f51196f",
         include_logs=True,
@@ -125,7 +115,7 @@ def test_get_transactions() -> None:
 
     assert tx
     assert (
-        tx.hash == "0x82c13aaac6f0b6471afb94a3a64ae89d45baa3608ad397621dbb0d847f51196f"
+            tx.hash == "0x82c13aaac6f0b6471afb94a3a64ae89d45baa3608ad397621dbb0d847f51196f"
     )
     assert tx.to_address == "0x98767abab06e45a181ab73ae4cd0fecd0fbd0cd0"
     assert tx.from_address == "0x64aa6f93e0e1f49ff4958990c40d4bf17dafc0eb"
@@ -135,8 +125,7 @@ def test_get_transactions() -> None:
 
 
 @pytest.mark.webtest
-def test_get_token_holders() -> None:
-    client = AnkrAdvancedAPI()
+def test_get_token_holders(client: AnkrAdvancedAPI) -> None:
     holders = list(
         client.get_token_holders(
             blockchain="bsc",
@@ -152,8 +141,7 @@ def test_get_token_holders() -> None:
 
 
 @pytest.mark.webtest
-def test_get_token_holders_pagination() -> None:
-    client = AnkrAdvancedAPI()
+def test_get_token_holders_pagination(client: AnkrAdvancedAPI) -> None:
     holders = list(
         client.get_token_holders(
             blockchain="bsc",
@@ -169,8 +157,7 @@ def test_get_token_holders_pagination() -> None:
 
 
 @pytest.mark.webtest
-def test_get_token_holders_count_history() -> None:
-    client = AnkrAdvancedAPI()
+def test_get_token_holders_count_history(client: AnkrAdvancedAPI) -> None:
     daily_holders_counts = list(
         client.get_token_holders_count_history(
             blockchain="bsc",
@@ -187,8 +174,7 @@ def test_get_token_holders_count_history() -> None:
 
 
 @pytest.mark.webtest
-def test_get_token_holders_count() -> None:
-    client = AnkrAdvancedAPI()
+def test_get_token_holders_count(client: AnkrAdvancedAPI) -> None:
     holders_count = client.get_token_holders_count(
         blockchain="bsc",
         contract_address="0xf307910A4c7bbc79691fD374889b36d8531B08e3",
@@ -200,8 +186,7 @@ def test_get_token_holders_count() -> None:
 
 
 @pytest.mark.webtest
-def test_get_account_balance() -> None:
-    client = AnkrAdvancedAPI()
+def test_get_account_balance(client: AnkrAdvancedAPI) -> None:
     assets = list(
         client.get_account_balance(
             wallet_address="0x77A859A53D4de24bBC0CC80dD93Fbe391Df45527",
@@ -214,8 +199,7 @@ def test_get_account_balance() -> None:
 
 
 @pytest.mark.webtest
-def test_get_token_price() -> None:
-    client = AnkrAdvancedAPI()
+def test_get_token_price(client: AnkrAdvancedAPI) -> None:
     price = client.get_token_price(
         contract_address="0x8290333cef9e6d528dd5618fb97a76f268f3edd4",
         blockchain="eth",
@@ -226,8 +210,7 @@ def test_get_token_price() -> None:
 
 
 @pytest.mark.webtest
-def test_get_token_price__no_price() -> None:
-    client = AnkrAdvancedAPI()
+def test_get_token_price__no_price(client: AnkrAdvancedAPI) -> None:
     price = client.get_token_price(
         contract_address="0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
         blockchain="eth",
