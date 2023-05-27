@@ -34,7 +34,7 @@ def test_get_logs(client: AnkrAdvancedAPI) -> None:
     assert len(logs) == 18
     assert logs[0].address == "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
     assert logs[0].event
-    assert logs[0].event.name == "Deposit"
+    assert logs[0].event.name == "Transfer"
 
 
 @pytest.mark.webtest
