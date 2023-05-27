@@ -115,7 +115,7 @@ def test_get_transactions(client: AnkrAdvancedAPI) -> None:
 
     assert tx
     assert (
-            tx.hash == "0x82c13aaac6f0b6471afb94a3a64ae89d45baa3608ad397621dbb0d847f51196f"
+        tx.hash == "0x82c13aaac6f0b6471afb94a3a64ae89d45baa3608ad397621dbb0d847f51196f"
     )
     assert tx.to_address == "0x98767abab06e45a181ab73ae4cd0fecd0fbd0cd0"
     assert tx.from_address == "0x64aa6f93e0e1f49ff4958990c40d4bf17dafc0eb"

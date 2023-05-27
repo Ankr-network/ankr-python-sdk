@@ -15,5 +15,3 @@ def api_key() -> str:
 @pytest.fixture
 def client(api_key: str) -> AnkrAdvancedAPI:
     return AnkrAdvancedAPI(api_key)
-
-
