@@ -101,7 +101,9 @@ logs = ankr_w3.query.get_logs(
 Get data about all the NFTs (collectibles) owned by a wallet.
 
 ````python3
-nfts = ankr_w3.nft.get_nfts(
+import ankr
+
+nfts = ankr.advanced_apis.AnkrNFTAPI.get_nfts(
     blockchain="eth",
     wallet_address="0x0E11A192d574b342C51be9e306694C41547185DD",
     filter=[

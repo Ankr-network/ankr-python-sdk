@@ -1,7 +1,6 @@
 # coding: utf-8
 
 # flake8: noqa
-
 """
     Ankr Advanced API
 
@@ -14,15 +13,7 @@
 
 from __future__ import absolute_import
 
-# import apis into sdk package
-from ankr.api.early_access_api import EarlyAccessApi
-from ankr.api.nft_api_api import NFTAPIApi
-from ankr.api.query_api_api import QueryAPIApi
-from ankr.api.token_api_api import TokenAPIApi
-# import ApiClient
-from ankr.api_client import ApiClient
-from ankr.configuration import Configuration
-# import models into sdk package
+# import models into model package
 from ankr.models.ankr_explain_token_price_body import AnkrExplainTokenPriceBody
 from ankr.models.ankr_explain_token_price_params import AnkrExplainTokenPriceParams
 from ankr.models.ankr_get_account_balance_body import AnkrGetAccountBalanceBody
