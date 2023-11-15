@@ -28,26 +28,54 @@ class InlineResponse2007(object):
                             and the value is json key in definition.
     """
     swagger_types = {
+        'error': 'object',
         'id': 'int',
         'jsonrpc': 'str',
         'result': 'object'
     }
 
     attribute_map = {
+        'error': 'error',
         'id': 'id',
         'jsonrpc': 'jsonrpc',
         'result': 'result'
     }
 
-    def __init__(self, id=None, jsonrpc=None, result=None):  # noqa: E501
+    def __init__(self, error=None, id=None, jsonrpc=None, result=None):  # noqa: E501
         """InlineResponse2007 - a model defined in Swagger"""  # noqa: E501
+        self._error = None
         self._id = None
         self._jsonrpc = None
         self._result = None
         self.discriminator = None
-        self.id = id
+        if error is not None:
+            self.error = error
+        if id is not None:
+            self.id = id
         self.jsonrpc = jsonrpc
-        self.result = result
+        if result is not None:
+            self.result = result
+
+    @property
+    def error(self):
+        """Gets the error of this InlineResponse2007.  # noqa: E501
+
+
+        :return: The error of this InlineResponse2007.  # noqa: E501
+        :rtype: object
+        """
+        return self._error
+
+    @error.setter
+    def error(self, error):
+        """Sets the error of this InlineResponse2007.
+
+
+        :param error: The error of this InlineResponse2007.  # noqa: E501
+        :type: object
+        """
+
+        self._error = error
 
     @property
     def id(self):
@@ -67,8 +95,6 @@ class InlineResponse2007(object):
         :param id: The id of this InlineResponse2007.  # noqa: E501
         :type: int
         """
-        if id is None:
-            raise ValueError("Invalid value for `id`, must not be `None`")  # noqa: E501
 
         self._id = id
 
@@ -121,8 +147,6 @@ class InlineResponse2007(object):
         :param result: The result of this InlineResponse2007.  # noqa: E501
         :type: object
         """
-        if result is None:
-            raise ValueError("Invalid value for `result`, must not be `None`")  # noqa: E501
 
         self._result = result
 

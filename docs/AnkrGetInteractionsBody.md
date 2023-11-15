@@ -3,7 +3,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **int** |  | 
+**id** | **int** |  | [optional] 
 **jsonrpc** | **str** |  | 
 **method** | **str** |  | 
 **params** | [**AnkrGetInteractionsParams**](AnkrGetInteractionsParams.md) |  | 

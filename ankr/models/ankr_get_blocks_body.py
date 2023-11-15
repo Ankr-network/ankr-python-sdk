@@ -48,7 +48,8 @@ class AnkrGetBlocksBody(object):
         self._method = None
         self._params = None
         self.discriminator = None
-        self.id = id
+        if id is not None:
+            self.id = id
         self.jsonrpc = jsonrpc
         self.method = method
         self.params = params
@@ -71,8 +72,6 @@ class AnkrGetBlocksBody(object):
         :param id: The id of this AnkrGetBlocksBody.  # noqa: E501
         :type: int
         """
-        if id is None:
-            raise ValueError("Invalid value for `id`, must not be `None`")  # noqa: E501
 
         self._id = id
 
