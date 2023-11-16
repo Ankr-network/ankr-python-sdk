@@ -22,9 +22,9 @@ import tempfile
 import six
 from six.moves.urllib.parse import quote
 
-from ankr.configuration import Configuration
-import ankr.models
-from ankr import rest
+from ankr_gen.configuration import Configuration
+import ankr_gen.models
+from ankr_gen import rest
 
 
 class ApiClient(object):
@@ -257,7 +257,7 @@ class ApiClient(object):
             if klass in self.NATIVE_TYPES_MAPPING:
                 klass = self.NATIVE_TYPES_MAPPING[klass]
             else:
-                klass = getattr(ankr.models, klass)
+                klass = getattr(ankr_gen.models, klass)
 
         if klass in self.PRIMITIVE_TYPES:
             return self.__deserialize_primitive(data, klass)
