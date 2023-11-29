@@ -20,11 +20,6 @@ web3 = "^6.4.0"
 pydantic = "^1.10.8"
 pyhumps = "^3.8.0"
 typing-extensions = "^4.6.2"
-certifi = ">=14.05.14"
-six = ">=1.10"
-python-dateutil = ">=2.5.3"
-setuptools = ">=21.0.0"
-urllib3 = ">=1.15.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^7.3.1"
