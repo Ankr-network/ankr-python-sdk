@@ -18,11 +18,11 @@ TReplyPaginated = TypeVar("TReplyPaginated", bound=types.RPCReplyPaginated)
 
 class MultichainHTTPProvider(HTTPProvider):
     def __init__(
-        self,
-        api_key: str,
-        endpoint_uri: Optional[Union[URI, str]] = None,
-        request_kwargs: Optional[Any] = None,
-        session: Optional[Any] = None,
+            self,
+            api_key: str,
+            endpoint_uri: Optional[Union[URI, str]] = None,
+            request_kwargs: Optional[Any] = None,
+            session: Optional[Any] = None,
     ) -> None:
         endpoint_uri = endpoint_uri or "https://rpc.ankr.com/multichain/"
         super().__init__(endpoint_uri + api_key, request_kwargs, session)
@@ -36,10 +36,10 @@ class MultichainHTTPProvider(HTTPProvider):
         return response
 
     def call_method(
-        self,
-        rpc: str,
-        request: TRequest,
-        reply_type: Type[TReply],
+            self,
+            rpc: str,
+            request: TRequest,
+            reply_type: Type[TReply],
     ) -> TReply:
         request_dict = request.dict(by_alias=True, exclude_none=True)
         response = self.make_request(RPCEndpoint(rpc), request_dict)
@@ -47,33 +47,20 @@ class MultichainHTTPProvider(HTTPProvider):
         return reply
 
     def call_method_paginated(
-        self,
-        *,
-        method: str,
-        request_params: Any,
-        reply_type: Any,
-        iterable_name: str,
-        iterable_type: Any,
-        limit: Optional[int] = None,
-        call_function = Any,
-        body_type : Any,
+            self,
+            *,
+            rpc: str,
+            request: TRequestPaginated,
+            reply_type: Type[TReplyPaginated],
+            iterable_name: str,
+            iterable_type: Type[TReply],
+            limit: Optional[int] = None,
     ) -> Iterable[TReply]:
-        # request_dict = request.dict(by_alias=True, exclude_none=True)
+        request_dict = request.dict(by_alias=True, exclude_none=True)
+        response = self.make_request(RPCEndpoint(rpc), request_dict)
+        reply = reply_type(**response["result"])
 
-        # request_dict = {key: value for key, value in request.__dict__.items() if value is not None}
-
-
-        body = body_type(
-            id=1,
-            jsonrpc="2.0",
-            method=method,
-            params=request_params
-        )
-
-        response = call_function(body=body)
-        reply = response.get("result", {})
-
-        items: List[Any] = reply.get(iterable_name, []) if isinstance(reply, dict) else []
+        items: List[TReply] = getattr(reply, iterable_name) or []
 
         if limit:
             if limit <= len(items):
@@ -83,31 +70,29 @@ class MultichainHTTPProvider(HTTPProvider):
 
         yield from items
 
-        if reply['nextPageToken']:
-            request_params.page_token = reply['nextPageToken']
+        if reply.next_page_token:
+            request.page_token = reply.next_page_token
             yield from self.call_method_paginated(
-                method=method,
-                request_params=request_params,
+                rpc=RPCEndpoint(rpc),
+                request=request,
                 reply_type=reply_type,
                 iterable_name=iterable_name,
                 iterable_type=iterable_type,
                 limit=limit,
-                call_function=call_function,
-                body_type=body_type
             )
 
 
 class TProviderConstructor(Protocol):
     def __call__(
-        self, api_key: Optional[str] = None, request_kwargs: Optional[Any] = None
+            self, api_key: Optional[str] = None, request_kwargs: Optional[Any] = None
     ) -> HTTPProvider:
         ...
 
 
 def http_provider_constructor(url: str) -> TProviderConstructor:
     def init(
-        api_key: Optional[str] = None,
-        request_kwargs: Optional[Any] = None,
+            api_key: Optional[str] = None,
+            request_kwargs: Optional[Any] = None,
     ) -> HTTPProvider:
         if api_key is None:
             api_key = ""
