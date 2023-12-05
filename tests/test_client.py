@@ -5,7 +5,7 @@ import datetime
 import pytest
 
 from ankr.advanced_apis import AnkrAdvancedAPI
-from ankr.types import Blockchain, NftContractType
+from ankr.types import Blockchain
 
 
 def test_client_api_key() -> None:
@@ -85,7 +85,7 @@ def test_get_nft_metadata(client: AnkrAdvancedAPI) -> None:
 
     assert reply.metadata
     assert reply.metadata.blockchain == "eth"
-    assert reply.metadata.contract_type == NftContractType.ERC1155
+    assert reply.metadata.contract_type == "ERC1155"
     assert reply.attributes
     assert reply.attributes.name == "Overleveraged"
 
