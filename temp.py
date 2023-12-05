@@ -6,9 +6,9 @@ from ankr.types import Blockchain
 
 if __name__ == "__main__":
     # ankr_w3= ankr.AnkrWeb3(api_key="31000350a6f93afcfdf56edef0b7169e1d87c3ac72d747f74ee4acfa3a3b1c42")
-    ankr_w3 = ankr.AnkrWeb3(api_key="31000350a6f93afcfdf56edef0b7169e1d87c3ac72d747f74ee4acfa3a3b1c42")
-
-    # result = ankr_w3.query.get_logs(
+    ankr_w3 = ankr.AnkrWeb3(api_key="")
+    #
+    # result = ankr_w3.query.get_logs_raw(
     #     request=types.GetLogsRequest(
     #         blockchain=[Blockchain.Eth],
     #         fromBlock=1181739,
