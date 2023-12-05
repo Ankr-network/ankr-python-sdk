@@ -146,23 +146,23 @@ Token API
 - [`get_token_holders_count_history`](#gettokenholderscounthistory--gettokenholderscounthistoryraw)
 - [`get_token_holders_count`](#gettokenholderscount--gettokenholderscountraw)
 - [`get_token_price`](#gettokenprice--gettokenpriceraw)
-- [`getTokenTransfers`](#gettokentransfers--gettokentransfersraw)
+- [`get_token_transfers`](#gettokentransfers--gettokentransfersraw)
 
 NFT API
 
-- [`getNFTsByOwner`](#getnftsbyowner)
-- [`getNFTMetadata`](#getnftmetadata)
-- [`getNFTHolders`](#getnftholders)
-- [`getNftTransfers`](#getnfttransfers)
+- [`get_nfts`](#getnfts--getnftsraw)
+- [`get_nft_metadata`](#getnftmetadata--getnftmetadataraw)
+- [`get_nft_holders`](#getnftholders--getnftholdersraw)
+- [`get_nft_transfers`](#getnfttransfers--getnfttransfersraw)
 
 Query API
 
-- [`getLogs`](#getlogs)
-- [`getBlocks`](#getblocks)
-- [`getTransactionsByHash`](#gettransactionsbyhash)
-- [`getTransactionsByAddress`](#gettransactionsbyaddress)
-- [`getBlockchainStats`](#getblockchainstats)
-- [`getInteractions`](#getinteractions)
+- [`get_logs`](#getlogs--getlogsraw)
+- [`get_blocks`](#getblocks--getblocksraw)
+- [`get_transaction`](#gettransaction--gettransactionraw)
+- [`get_transactions_by_address`](#gettransactionsbyaddress--gettransactionsbyaddressraw)
+- [`get_blockchain_stats`](#getblockchainstats--getblockchainstatsraw)
+- [`get_interactions`](#getinteractions--getinteractionsraw)
 
 
 Note: some methods are available in *_raw format, allowing to get full reply with syncStatus and control pagination by hands.
@@ -179,6 +179,9 @@ Note: some methods are available in *_raw format, allowing to get full reply wit
 ### Early Access API
 
 #### `get_token_price_history` / `get_token_price_history_raw`
+
+Get a list of history of the price for given contract to given timestamp.
+
 ```python3
 from ankr import AnkrAdvancedAPI, AnkrWeb3
 from ankr.types import Blockchain, GetTokenPriceHistoryRequest
@@ -198,6 +201,9 @@ print(result)
 ```
 
 #### `get_account_balance_historical` / `get_account_balance_historical_raw`
+
+Get the coin and token balances of the wallet at specified block.
+
 ```python3
 from ankr import AnkrAdvancedAPI, AnkrWeb3
 from ankr.types import Blockchain, GetAccountBalanceHistoricalRequest
@@ -216,6 +222,9 @@ print(result)
 ```
 
 #### `get_internal_transactions_by_block_number` / `get_internal_transactions_by_block_number_raw`
+
+Get a list of internal transactions in the block.
+
 ```python3
 from ankr import AnkrAdvancedAPI, AnkrWeb3
 from ankr.types import Blockchain, GetInternalTransactionsByBlockNumberRequest
@@ -234,6 +243,9 @@ for transaction in result:
 ```
 
 #### `get_internal_transactions_by_parent_hash` / `get_internal_transactions_by_parent_hash_raw`
+
+Get a list of internal transactions in the transaction.
+
 ```python3
 from ankr import AnkrAdvancedAPI, AnkrWeb3
 from ankr.types import Blockchain, GetInternalTransactionsByParentHashRequest
@@ -255,6 +267,8 @@ for transaction in result:
 
 #### `explain_token_price` / `explain_token_price_raw`
 
+Get a list of tokens and pool how price for calculated.
+
 ```python3
 from ankr import AnkrAdvancedAPI, AnkrWeb3
 from ankr.types import Blockchain, ExplainTokenPriceRequest
@@ -275,6 +289,8 @@ print(estimates)
 
 #### `get_account_balance` / `get_account_balance_raw`
 
+Get the coin and token balances of a wallet.
+
 ```python3
 from ankr import AnkrAdvancedAPI, AnkrWeb3
 from ankr.types import GetAccountBalanceRequest
@@ -293,6 +309,8 @@ for balance in result:
 
 #### `get_currencies` / `get_currencies_raw`
 
+Get a list of supported currencies for a given blockchain.
+
 ```python3
 from ankr import AnkrAdvancedAPI, AnkrWeb3
 from ankr.types import Blockchain, GetCurrenciesRequest
@@ -310,6 +328,8 @@ for currency in result:
 ```
 
 #### `get_token_holders` / `get_token_holders_raw`
+
+Get the list of token holders for a given contract address.
 
 ```python3
 from ankr import AnkrAdvancedAPI, AnkrWeb3
@@ -330,6 +350,8 @@ for balance in result:
 
 #### `get_token_holders_count_history` / `get_token_holders_count_history_raw`
 
+Get historical data about the number of token holders for a given contract address.
+
 ```python3
 from ankr import AnkrAdvancedAPI, AnkrWeb3
 from ankr.types import Blockchain, GetTokenHoldersCountRequest
@@ -349,6 +371,8 @@ for balance in result:
 
 #### `get_token_holders_count` / `get_token_holders_count_raw`
 
+Get current data about the number of token holders for a given contract address.
+
 ```python3
 from ankr import AnkrAdvancedAPI, AnkrWeb3
 from ankr.types import Blockchain, GetTokenHoldersCountRequest
@@ -366,6 +390,8 @@ print(result)
 ```
 
 #### `get_token_price` / `get_token_price_raw`
+
+Get token price by contract.
 
 ```python3
 from ankr import AnkrAdvancedAPI, AnkrWeb3
@@ -385,6 +411,8 @@ print(result)
 
 #### `get_token_transfers` / `get_token_transfers_raw`
 
+Get token transfers of specified address.
+
 ```python3
 from ankr import AnkrAdvancedAPI, AnkrWeb3
 from ankr.types import Blockchain, GetTransfersRequest
@@ -402,7 +430,241 @@ result = AnkrAdvancedAPI.get_token_transfers(
 )
 
 for transfer in result:
-    print(result)
+    print(transfer)
+```
+
+### NFT API
+
+#### `get_nfts` / `get_nfts_raw`
+
+Get data about all the NFTs (collectibles) owned by a wallet.
+
+```python3
+from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr.types import Blockchain, GetNFTsByOwnerRequest
+
+ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+
+result = AnkrAdvancedAPI.get_nfts_raw(
+    request=GetNFTsByOwnerRequest(
+        blockchain=Blockchain.Eth,
+        walletAddress='0x0E11A192d574b342C51be9e306694C41547185DD',
+    )
+)
+
+for nft in result:
+    print(nft)
+```
+
+#### `get_nft_metadata` / `get_nft_metadata_raw`
+
+Get NFT's contract metadata.
+
+```python3
+from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr.types import Blockchain, GetNFTMetadataRequest
+
+ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+
+metadata, attributes = AnkrAdvancedAPI.get_nft_metadata(
+    request=GetNFTMetadataRequest(
+        blockchain=Blockchain.Eth,
+        contractAddress='0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d',
+        tokenId='1500',
+        forceFetch=False,
+    )
+)
+
+print(metadata)
+print(attributes)
+```
+
+#### `get_nft_holders` / `get_nft_holders_raw`
+
+Get NFT's holders.
+
+```python3
+from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr.types import Blockchain, GetNFTHoldersRequest
+
+ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+
+result = AnkrAdvancedAPI.get_nft_holders(
+    request=GetNFTHoldersRequest(
+        blockchain=Blockchain.Arbitrum,
+        contractAddress='0xc36442b4a4522e871399cd717abdd847ab11fe88',
+    ),
+    limit=1000
+)
+
+for holder in result:
+    print(holder)
+```
+
+#### `get_nft_transfers` / `get_nft_transfers_raw`
+
+Get NFT Transfers of specified address.
+
+```python3
+from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr.types import Blockchain, GetTransfersRequest
+
+ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+
+result = AnkrAdvancedAPI.get_nft_transfers(
+    request=GetTransfersRequest(
+        blockchain=[Blockchain.Eth, Blockchain.Bsc],
+        address=['0xd8da6bf26964af9d7eed9e03e53415d37aa96045'],
+        fromTimestamp=1672553107,
+        toTimestamp=1672683207,
+    )
+)
+
+for transfer in result:
+    print(transfer)
+```
+
+### Query API
+
+#### `get_logs` / `get_logs_raw`
+
+Get logs matching the filter.
+
+```python3
+from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr.types import Blockchain, GetLogsRequest
+
+ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+
+result = AnkrAdvancedAPI.get_logs(
+    request=GetLogsRequest(
+        blockchain=[Blockchain.Eth],
+        fromBlock=1181739,
+        toBlock=1181739,
+        address=["0x3589d05a1ec4af9f65b0e5554e645707775ee43c"],
+        topics=[
+            [],
+            ["0x000000000000000000000000feb92d30bf01ff9a1901666c5573532bfa07eeec"],
+        ],
+        decodeLogs=True,
+    ),
+    limit=10
+)
+
+for log in result:
+    print(log)
+```
+
+#### `get_blocks` / `get_blocks_raw`
+
+Query data about blocks within a specified range.
+
+```python3
+from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr.types import Blockchain, GetBlocksRequest
+
+ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+
+result = AnkrAdvancedAPI.get_blocks(
+    request=GetBlocksRequest(
+        blockchain=Blockchain.Eth,
+        fromBlock=14500001,
+        toBlock=14500004,
+        descOrder=True,
+        includeLogs=True,
+        includeTxs=True,
+        decodeLogs=True,
+    )
+)
+
+for block in result:
+    print(block)
+```
+
+#### `get_transaction` / `get_transaction_raw`
+
+Query data about transaction by the transaction hash.
+
+```python3
+from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr.types import GetTransactionsByHashRequest
+
+ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+
+result = AnkrAdvancedAPI.get_transaction(
+    request=GetTransactionsByHashRequest(
+        transactionHash='0x82c13aaac6f0b6471afb94a3a64ae89d45baa3608ad397621dbb0d847f51196f',
+        decodeTxData=True
+    )
+)
+
+print(result)
+```
+
+#### `get_transactions_by_address` / `get_transactions_by_address_raw`
+
+Query data about transactions of specified address.
+
+```python3
+from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr.types import Blockchain, GetTransactionsByAddressRequest
+
+ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+
+result = AnkrAdvancedAPI.get_transactions_by_address(
+    request=GetTransactionsByAddressRequest(
+        blockchain=Blockchain.Bsc,
+        fromBlock=23593283,
+        toBlock=23593283,
+        address=[
+            "0x97242e3315c7ece760dc7f83a7dd8af6659f8c4c"
+        ],
+        descOrder=True,
+    )
+)
+
+for transaction in result:
+    print(transaction)
+```
+
+#### `get_blockchain_stats` / `get_blockchain_stats_raw`
+
+Returns blockchain stats (num of txs, etc).
+
+```python3
+from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr.types import Blockchain, GetBlockchainStatsRequest
+
+ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+
+result = AnkrAdvancedAPI.get_blockchain_stats_raw(
+    request=GetBlockchainStatsRequest(
+        blockchain=Blockchain.Bsc,
+    )
+)
+
+for stat in result:
+    print(stat)
+```
+
+#### `get_interactions` / `get_interactions_raw`
+
+Returns on which chain address was interacting.
+
+```python3
+from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr.types import GetInteractionsRequest
+
+ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+
+result = AnkrAdvancedAPI.get_interactions(
+    request=GetInteractionsRequest(
+        address='0xF977814e90dA44bFA03b6295A0616a897441aceC',
+    )
+)
+
+for blockchain in result:
+    print(blockchain)
 ```
 
 

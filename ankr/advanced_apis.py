@@ -125,6 +125,7 @@ class AnkrEarlyAccessAPI(AnkrMultichainAPI):
 
         return reply
 
+
 class AnkrQueryAPI(AnkrMultichainAPI):
     def get_logs(
         self,
@@ -153,57 +154,131 @@ class AnkrQueryAPI(AnkrMultichainAPI):
 
         return reply
 
-
     def get_blocks(
         self,
-        request: types_gen.GetBlocksRequest,
-    ) -> List[types_gen.Block]:
+        request: types.GetBlocksRequest,
+    ) -> List[types.Block]:
         reply = self.provider.call_method(
             rpc="ankr_getBlocks",
             request=request,
-            reply=types_gen.GetBlocksReply,
+            reply=types.GetBlocksReply,
         )
 
         return reply.blocks
 
     def get_blocks_raw(
         self,
-        request: types_gen.GetBlocksRequest,
-    ) -> types_gen.GetBlocksReply:
+        request: types.GetBlocksRequest,
+    ) -> types.GetBlocksReply:
         reply = self.provider.call_method(
             rpc="ankr_getBlocks",
             request=request,
-            reply=types_gen.GetBlocksReply,
+            reply=types.GetBlocksReply,
         )
 
         return reply
 
-
     def get_transaction(
         self,
-        transaction_hash: str,
-        blockchain: Optional[types.BlockchainNames] = None,
-        include_logs: Optional[bool] = False,
-        decode_logs: Optional[bool] = False,
-        decode_tx_data: Optional[bool] = False,
-        **kwargs: Any,
-    ) -> Optional[Any]:
-        reply = super().call_method(
-            "ankr_getTransactionsByHash",
-            request_params = ankr_gen.AnkrGetTransactionsByHashParams(
-                blockchain=blockchain,
-                transaction_hash=transaction_hash,
-                include_logs=include_logs,
-                decode_logs=decode_logs,
-                decode_tx_data=decode_tx_data,
-                **kwargs,
-            ),
-            call_function=self.api.ankr_get_transactions_by_hash_post,
-            body_type=ankr_gen.AnkrGetTransactionsByHashBody
+        request: types.GetTransactionsByHashRequest,
+    ) -> types.Transaction | None:
+        reply = self.provider.call_method(
+            rpc="ankr_getTransactionsByHash",
+            request=request,
+            reply=types.GetTransactionsByHashReply,
         )
 
-        if reply['transactions']:
-            return reply['transactions'][0]
+        if len(reply.transactions) > 0:
+            return reply.transactions[0]
+        else:
+            return None
+
+    def get_transaction_raw(
+        self,
+        request: types.GetTransactionsByHashRequest,
+    ) -> types.GetTransactionsByHashReply:
+        reply = self.provider.call_method(
+            rpc="ankr_getTransactionsByHash",
+            request=request,
+            reply=types.GetTransactionsByHashReply,
+        )
+
+        return reply
+
+    def get_transactions_by_address(
+            self,
+            request: types.GetTransactionsByAddressRequest,
+            limit: Optional[int] = None,
+    ) -> Iterable[types.Transaction]:
+        for transaction in self.provider.call_method_paginated(
+                rpc="ankr_getTransactionsByAddress",
+                request=request,
+                reply=types.GetTransactionsByAddressReply,
+                iterable_name="transactions",
+                iterable_type=types.Transaction,
+                limit=limit
+        ):
+            yield transaction
+
+    def get_transactions_by_address_raw(
+            self,
+            request: types.GetTransactionsByAddressRequest,
+    ) -> types.GetTransactionsByAddressReply:
+        reply = self.provider.call_method(
+            rpc="ankr_getTransactionsByAddress",
+            request=request,
+            reply=types.GetTransactionsByAddressReply,
+        )
+
+        return reply
+
+    def get_blockchain_stats(
+            self,
+            request: types.GetBlockchainStatsRequest,
+    ) -> List[types.BlockchainStats]:
+        reply = self.provider.call_method(
+            rpc="ankr_getBlockchainStats",
+            request=request,
+            reply=types.GetBlockchainStatsReply,
+        )
+
+        return reply.stats
+
+    def get_blockchain_stats_raw(
+            self,
+            request: types.GetBlockchainStatsRequest,
+    ) -> types.GetBlockchainStatsReply:
+        reply = self.provider.call_method(
+            rpc="ankr_getBlockchainStats",
+            request=request,
+            reply=types.GetBlockchainStatsReply,
+        )
+
+        return reply
+
+    def get_interactions(
+            self,
+            request: types.GetInteractionsRequest,
+    ) -> List[types.Blockchain]:
+        reply = self.provider.call_method(
+            rpc="ankr_getInteractions",
+            request=request,
+            reply=types.GetInteractionsReply,
+        )
+
+        return reply.blockchains
+
+    def get_interactions_raw(
+            self,
+            request: types.GetInteractionsRequest,
+    ) -> types.GetInteractionsReply:
+        reply = self.provider.call_method(
+            rpc="ankr_getInteractions",
+            request=request,
+            reply=types.GetInteractionsReply,
+        )
+
+        return reply
 
 
 class AnkrTokenAPI(AnkrMultichainAPI):
@@ -415,74 +490,106 @@ class AnkrTokenAPI(AnkrMultichainAPI):
         return reply
 
 
-
 class AnkrNFTAPI(AnkrMultichainAPI):
     def get_nfts(
-        self,
-        request: types_gen.GetNFTsByOwnerRequest,
-        limit: Optional[int] = None,
-    ) -> Iterable[types_gen.GetNFTsByOwnerReply]:
+            self,
+            request: types.GetNFTsByOwnerRequest,
+            limit: Optional[int] = None
+    ) -> Iterable[types.Nft]:
         for nft in self.provider.call_method_paginated(
                 rpc="ankr_getNFTsByOwner",
                 request=request,
-                reply=types_gen.GetNFTsByOwnerReply,
+                reply=types.GetNFTsByOwnerReply,
                 iterable_name="assets",
-                iterable_type=types_gen.Nft,
+                iterable_type=types.Nft,
                 limit=limit
         ):
             yield nft
 
     def get_nfts_raw(
-        self,
-        request: GetNFTsByOwnerRequest,
-        limit: Optional[int] = None,
-    ) -> GetNFTsByOwnerReply:
+            self,
+            request: types.GetNFTsByOwnerRequest
+    ) -> types.GetNFTsByOwnerReply:
         reply = self.provider.call_method(
             rpc="ankr_getNFTsByOwner",
             request=request,
-            reply=GetNFTsByOwnerReply,
+            reply=types.GetNFTsByOwnerReply,
         )
-
         return reply
 
     def get_nft_metadata(
-        self,
-        blockchain: types.BlockchainName,
-        contract_address: str,
-        token_id: str,
-        **kwargs: Any,
-    ) -> Any:
-        return super().call_method(
-            "ankr_getNFTMetadata",
-            request_params = ankr_gen.AnkrGetNFTMetadataParams(
-                blockchain=blockchain,
-                contract_address=contract_address,
-                token_id=token_id,
-                **kwargs,
-            ),
-            call_function=self.api.ankr_get_nft_metadata_post,
-            body_type=ankr_gen.AnkrGetNFTMetadataBody
+            self,
+            request: types.GetNFTMetadataRequest
+    ) -> [types.NftMetadata, types.NftAttributes]:
+        reply = self.provider.call_method(
+            rpc="ankr_getNFTMetadata",
+            request=request,
+            reply=types.GetNFTMetadataReply,
         )
+        return reply.metadata, reply.attributes
+
+    def get_nft_metadata_raw(
+            self,
+            request: types.GetNFTMetadataRequest
+    ) -> types.GetNFTMetadataReply:
+        reply = self.provider.call_method(
+            rpc="ankr_getNFTMetadata",
+            request=request,
+            reply=types.GetNFTMetadataReply,
+        )
+        return reply
 
     def get_nft_holders(
-        self,
-        blockchain: types.BlockchainName,
-        contract_address: str,
-        limit: Optional[int] = None,
-        **kwargs: Any,
-    ) -> Iterable[types.Address]:
-        return super().call_method_paginated(
-                method="ankr_getNFTHolders",
-                request_params=ankr_gen.AnkrGetNFTHoldersParams(
-                    blockchain=blockchain,
-                    contract_address=contract_address,
-                    **kwargs,
-                ),
+            self,
+            request: types.GetNFTHoldersRequest,
+            limit: Optional[int] = None,
+    ) -> Iterable[str]:
+        for holder in self.provider.call_method_paginated(
+                rpc="ankr_getNFTHolders",
+                request=request,
+                reply=types.GetNFTHoldersReply,
                 iterable_name="holders",
-                limit=limit,
-                call_function=self.api.ankr_get_nft_holders_post,
-                body_type=ankr_gen.AnkrGetNFTHoldersBody
+                iterable_type=str,
+                limit=limit
+        ):
+            yield holder
+
+    def get_nft_holders_raw(
+            self,
+            request: types.GetNFTHoldersRequest,
+    ) -> types.GetNFTHoldersReply:
+        reply = self.provider.call_method(
+            rpc="ankr_getNFTHolders",
+            request=request,
+            reply=types.GetNFTHoldersReply,
         )
+        return reply
+
+    def get_nft_transfers(
+            self,
+            request: types.GetTransfersRequest,
+            limit: Optional[int] = None
+    ) -> Iterable[types.NftTransfer]:
+        for transfer in self.provider.call_method_paginated(
+                rpc="ankr_getNftTransfers",
+                request=request,
+                reply=types.GetNftTransfersReply,
+                iterable_name="transfers",
+                iterable_type=types.NftTransfer,
+                limit=limit
+        ):
+            yield transfer
+
+    def get_nft_transfers_raw(
+            self,
+            request: types.GetTransfersRequest
+    ) -> types.GetNftTransfersReply:
+        reply = self.provider.call_method(
+            rpc="ankr_getNftTransfers",
+            request=request,
+            reply=types.GetNftTransfersReply,
+        )
+        return reply
 
 
 class AnkrAdvancedAPI(AnkrEarlyAccessAPI, AnkrQueryAPI, AnkrTokenAPI, AnkrNFTAPI):
