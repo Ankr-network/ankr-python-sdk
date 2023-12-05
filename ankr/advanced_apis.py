@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Any, Iterable, List, Optional
+from typing import Iterable, List, Optional
 
 from ankr import types
 from ankr.exceptions import APIError
@@ -285,7 +285,7 @@ class AnkrTokenAPI(AnkrMultichainAPI):
     def explain_token_price(
             self,
             request: types.ExplainTokenPriceRequest,
-    ) -> ([types.ExplainTokenPriceSinglePair],[types.PriceEstimate]):
+    ) -> ([types.ExplainTokenPriceSinglePair], [types.PriceEstimate]):
         reply = self.provider.call_method(
             rpc="ankr_explainTokenPrice",
             request=request,

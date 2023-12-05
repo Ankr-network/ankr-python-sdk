@@ -210,7 +210,6 @@ class GetBlocksReply:
         )
 
 
-
 class GetBlocksRequest:
     def __init__(self,
                  blockchain: Blockchain,
@@ -254,7 +253,6 @@ class GetBlocksRequest:
         }
 
 
-
 class GetTransactionsByHashReply:
     def __init__(self,
                  transactions: List[Transaction],
@@ -268,7 +266,6 @@ class GetTransactionsByHashReply:
             transactions=data.get('transactions'),
             syncStatus=data.get('syncStatus'),
         )
-
 
 
 class GetTransactionsByHashRequest:
@@ -305,7 +302,6 @@ class GetTransactionsByHashRequest:
         }
 
 
-
 class GetTransactionsByAddressReply:
     def __init__(self,
                  nextPageToken: str,
@@ -322,7 +318,6 @@ class GetTransactionsByAddressReply:
             transactions=data.get('transactions'),
             syncStatus=data.get('syncStatus'),
         )
-
 
 
 class GetTransactionsByAddressRequest:
@@ -374,7 +369,6 @@ class GetTransactionsByAddressRequest:
         }
 
 
-
 class GetLogsReply:
     def __init__(self,
                  logs: List[Log],
@@ -391,7 +385,6 @@ class GetLogsReply:
             nextPageToken=data.get('nextPageToken'),
             syncStatus=data.get('syncStatus'),
         )
-
 
 
 class GetLogsRequest:
@@ -446,7 +439,6 @@ class GetLogsRequest:
         }
 
 
-
 class BlockchainStats:
     def __init__(self,
                  blockTimeMs: float,
@@ -478,7 +470,6 @@ class GetBlockchainStatsReply:
         )
 
 
-
 class GetBlockchainStatsRequest:
     def __init__(self,
                  blockchain: Blockchain | List[Blockchain] = None,
@@ -501,7 +492,6 @@ class GetBlockchainStatsRequest:
         }
 
 
-
 class GetInteractionsReply:
     def __init__(self,
                  blockchains: List[str],
@@ -517,7 +507,6 @@ class GetInteractionsReply:
         )
 
 
-
 class GetInteractionsRequest:
     def __init__(self,
                  address: str,
@@ -530,7 +519,6 @@ class GetInteractionsRequest:
             'address': self.address,
             'syncCheck': self.syncCheck,
         }
-
 
 
 class Balance:
@@ -585,7 +573,6 @@ class GetAccountBalanceReply:
         )
 
 
-
 class GetAccountBalanceRequest:
     def __init__(self,
                  walletAddress: str,
@@ -623,7 +610,6 @@ class GetAccountBalanceRequest:
         }
 
 
-
 class GetTokenPriceReply:
     def __init__(self,
                  blockchain: Blockchain,
@@ -643,7 +629,6 @@ class GetTokenPriceReply:
             contractAddress=data.get('contractAddress'),
             syncStatus=data.get('syncStatus'),
         )
-
 
 
 class GetTokenPriceRequest:
@@ -669,7 +654,6 @@ class GetTokenPriceRequest:
             'contractAddress': self.contractAddress,
             'syncCheck': self.syncCheck,
         }
-
 
 
 class HolderBalance:
@@ -712,7 +696,6 @@ class GetTokenHoldersReply:
         )
 
 
-
 class GetTokenHoldersRequest:
     def __init__(self,
                  blockchain: Blockchain,
@@ -742,7 +725,6 @@ class GetTokenHoldersRequest:
             'pageSize': self.pageSize,
             'syncCheck': self.syncCheck,
         }
-
 
 
 class DailyHolderCount:
@@ -787,7 +769,6 @@ class GetTokenHoldersCountReply:
         )
 
 
-
 class GetTokenHoldersCountRequest:
     def __init__(self,
                  blockchain: Blockchain,
@@ -817,7 +798,6 @@ class GetTokenHoldersCountRequest:
             'pageSize': self.pageSize,
             'syncCheck': self.syncCheck,
         }
-
 
 
 class CurrencyDetailsExtended:
@@ -851,7 +831,6 @@ class GetCurrenciesReply:
         )
 
 
-
 class GetCurrenciesRequest:
     def __init__(self,
                  blockchain: Blockchain,
@@ -872,7 +851,6 @@ class GetCurrenciesRequest:
             'blockchain': blockchain_value,
             'syncCheck': self.syncCheck,
         }
-
 
 
 class TokenTransfer:
@@ -925,7 +903,6 @@ class GetTokenTransfersReply:
         )
 
 
-
 class GetTransfersRequest:
     def __init__(self,
                  blockchain: Blockchain | List[Blockchain],
@@ -970,7 +947,6 @@ class GetTransfersRequest:
             'descOrder': self.descOrder,
             'syncCheck': self.syncCheck,
         }
-
 
 
 class Trait:
@@ -1028,7 +1004,6 @@ class GetNFTsByOwnerReply:
         )
 
 
-
 class GetNFTsByOwnerRequest:
     def __init__(self,
                  walletAddress: str,
@@ -1061,7 +1036,6 @@ class GetNFTsByOwnerRequest:
             'pageSize': self.pageSize,
             'syncCheck': self.syncCheck,
         }
-
 
 
 class NftAttributes:
@@ -1114,7 +1088,6 @@ class GetNFTMetadataReply:
         )
 
 
-
 class GetNFTMetadataRequest:
     def __init__(self,
                  blockchain: Blockchain,
@@ -1146,7 +1119,6 @@ class GetNFTMetadataRequest:
         }
 
 
-
 class GetNFTHoldersReply:
     def __init__(self,
                  holders: List[str],
@@ -1163,7 +1135,6 @@ class GetNFTHoldersReply:
             nextPageToken=data.get('nextPageToken'),
             syncStatus=data.get('syncStatus'),
         )
-
 
 
 class GetNFTHoldersRequest:
@@ -1195,7 +1166,6 @@ class GetNFTHoldersRequest:
             'pageSize': self.pageSize,
             'syncCheck': self.syncCheck,
         }
-
 
 
 class NftTransfer:
@@ -1248,7 +1218,6 @@ class GetNftTransfersReply:
         )
 
 
-
 class GetTokenAllowancesRequest:
     def __init__(self,
                  blockchain: Blockchain | List[Blockchain],
@@ -1275,7 +1244,6 @@ class GetTokenAllowancesRequest:
             'spenderAddress': self.spenderAddress,
             'contractAddress': self.contractAddress,
         }
-
 
 
 class ERC20TokenAllowance:
@@ -1320,7 +1288,6 @@ class GetTokenAllowancesReply:
         )
 
 
-
 class GetTokenPriceHistoryRequest:
     def __init__(self,
                  blockchain: Blockchain,
@@ -1358,7 +1325,6 @@ class GetTokenPriceHistoryRequest:
         }
 
 
-
 class Quote:
     def __init__(self,
                  blockHeight: float,
@@ -1384,7 +1350,6 @@ class GetTokenPriceHistoryReply:
         )
 
 
-
 class ExplainTokenPriceRequest:
     def __init__(self,
                  blockHeight: float | Literal[Literal['latest']] | Literal[Literal['earliest']],
@@ -1408,7 +1373,6 @@ class ExplainTokenPriceRequest:
             'blockchain': blockchain_value,
             'tokenAddress': self.tokenAddress,
         }
-
 
 
 class PriceEstimate:
@@ -1482,7 +1446,6 @@ class ExplainTokenPriceReply:
         )
 
 
-
 class GetInternalTransactionsByParentHashRequest:
     def __init__(self,
                  blockchain: Blockchain,
@@ -1511,7 +1474,6 @@ class GetInternalTransactionsByParentHashRequest:
         }
 
 
-
 class GetInternalTransactionsByBlockNumberRequest:
     def __init__(self,
                  blockNumber: float,
@@ -1538,7 +1500,6 @@ class GetInternalTransactionsByBlockNumberRequest:
             'onlyWithValue': self.onlyWithValue,
             'syncCheck': self.syncCheck,
         }
-
 
 
 class InternalTransaction:
@@ -1596,7 +1557,6 @@ class GetInternalTransactionsReply:
         )
 
 
-
 class GetAccountBalanceHistoricalRequest:
     def __init__(self,
                  walletAddress: str,
@@ -1635,7 +1595,6 @@ class GetAccountBalanceHistoricalRequest:
             'blockHeight': self.blockHeight,
             'syncCheck': self.syncCheck,
         }
-
 
 
 class GetAccountBalanceHistoricalReply:
@@ -1685,5 +1644,3 @@ class Blockchain(Enum):
     Rollux = 'rollux'
     Scroll = 'scroll'
     Syscoin = 'syscoin'
-
-
