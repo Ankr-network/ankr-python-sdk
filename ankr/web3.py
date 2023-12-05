@@ -9,7 +9,7 @@ from web3.eth import Eth
 from web3.middleware import geth_poa_middleware
 from web3.module import Module
 
-from ankr.advanced_apis import AnkrNFTAPI, AnkrQueryAPI, AnkrTokenAPI
+from ankr.advanced_apis import AnkrNFTAPI, AnkrQueryAPI, AnkrTokenAPI, AnkrEarlyAccessAPI
 from ankr.providers import (
     ArbitrumHTTPProvider,
     AvalancheHTTPProvider,
@@ -72,6 +72,7 @@ class AnkrWeb3(Web3, metaclass=_Web3NamedMeta):
         self.__external_modules = external_modules
         self.__ens = ens
 
+        self.early = AnkrEarlyAccessAPI(api_key)
         self.query = AnkrQueryAPI(api_key)
         self.token = AnkrTokenAPI(api_key)
         self.nft = AnkrNFTAPI(api_key)

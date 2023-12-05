@@ -1,172 +1,183 @@
 from __future__ import annotations
 
-from typing import Any, Dict, Iterable, List, Optional
+from typing import Any, Iterable, List, Optional
 
-import ankr.types
-import ankr_gen
 from ankr import types
 from ankr.exceptions import APIError
+from ankr.providers import MultichainHTTPProvider
+
 
 class AnkrMultichainAPI:
     def __init__(
         self,
         api_key: str,
-        # endpoint_uri: Optional[str] = None,
+        endpoint_uri: Optional[str] = None,
     ) -> None:
-        configuration = ankr_gen.Configuration()
-        configuration.host = f"https://rpc.ankr.com/multichain/{api_key}"
-        # if endpoint_uri is not None:
-        #     configuration.host = endpoint_uri
-        # self.provider = MultichainHTTPProvider(api_key, "https://rpc.ankr.com/multichain/")
-        self.provider = ankr_gen.ApiClient(configuration=configuration)
+        self.provider = MultichainHTTPProvider(api_key, endpoint_uri)
 
-    def __del__(self):
-        self.provider.__del__()
 
-    def call_method(
+class AnkrEarlyAccessAPI(AnkrMultichainAPI):
+    def get_token_price_history(
             self,
-            method: str,
-            request_params: Any,
-            call_function : Any,
-            body_type : Any,
-    ) -> Any:
-        body = body_type(
-            id=1,
-            jsonrpc="2.0",
-            method=method,
-            params=request_params
+            request: types.GetTokenPriceHistoryRequest,
+    ) -> [types.Quote]:
+        reply = self.provider.call_method(
+            rpc="ankr_getTokenPriceHistory",
+            request=request,
+            reply=types.GetTokenPriceHistoryReply,
         )
-        response = call_function(body=body)
-        reply = response.result
 
-        if reply is None:
-            error = response.error
-            return error
+        if reply.quotes:
+            return reply.quotes
+        else:
+            return []
+
+    def get_token_price_history_raw(
+            self,
+            request: types.GetTokenPriceHistoryRequest,
+    ) -> types.GetTokenPriceHistoryReply:
+        reply = self.provider.call_method(
+            rpc="ankr_getTokenPriceHistory",
+            request=request,
+            reply=types.GetTokenPriceHistoryReply,
+        )
 
         return reply
 
-    def call_method_paginated(
+    def get_account_balance_historical(
             self,
-            *,
-            method: str,
-            request_params: Any,
-            iterable_name: str,
+            request: types.GetAccountBalanceHistoricalRequest,
             limit: Optional[int] = None,
-            call_function : Any,
-            body_type : Any,
-    ) -> Iterable[Any]:
-        body = body_type(
-            id=1,
-            jsonrpc="2.0",
-            method=method,
-            params=request_params
+    ) -> Iterable[types.Balance]:
+        for asset in self.provider.call_method_paginated(
+                rpc="ankr_getAccountBalanceHistorical",
+                request=request,
+                reply=types.GetAccountBalanceHistoricalReply,
+                iterable_name="assets",
+                iterable_type=types.Balance,
+                limit=limit
+        ):
+            yield asset
+
+    def get_account_balance_historical_raw(
+            self,
+            request: types.GetAccountBalanceHistoricalRequest,
+    ) -> types.GetAccountBalanceHistoricalReply:
+        reply = self.provider.call_method(
+            rpc="ankr_getAccountBalanceHistorical",
+            request=request,
+            reply=types.GetAccountBalanceReply,
         )
 
-        response = call_function(body=body)
-        reply = response.result
+        return reply
 
-        error = None
+    def get_internal_transactions_by_block_number(
+            self,
+            request: types.GetInternalTransactionsByBlockNumberRequest,
+            limit: Optional[int] = None,
+    ) -> Iterable[types.InternalTransaction]:
+        for asset in self.provider.call_method_paginated(
+                rpc="ankr_getInternalTransactionsByBlockNumber",
+                request=request,
+                reply=types.GetInternalTransactionsReply,
+                iterable_name="internalTransactions",
+                iterable_type=types.InternalTransaction,
+                limit=limit
+        ):
+            yield asset
 
-        if reply is None:
-            error = response.error
-            yield error
-            return
+    def get_internal_transactions_by_block_number_raw(
+            self,
+            request: types.GetInternalTransactionsByBlockNumberRequest,
+    ) -> types.GetInternalTransactionsReply:
+        reply = self.provider.call_method(
+            rpc="ankr_getInternalTransactionsByBlockNumber",
+            request=request,
+            reply=types.GetInternalTransactionsReply,
+        )
 
-        items: List[Any] = reply.get(iterable_name, []) if isinstance(reply, dict) else []
+        return reply
 
-        if limit:
-            if limit <= len(items):
-                yield from items[:limit]
-                return
-            limit -= len(items)
+    def get_internal_transactions_by_parent_hash(
+            self,
+            request: types.GetInternalTransactionsByParentHashRequest,
+            limit: Optional[int] = None,
+    ) -> Iterable[types.InternalTransaction]:
+        for asset in self.provider.call_method_paginated(
+                rpc="ankr_getInternalTransactionsByParentHash",
+                request=request,
+                reply=types.GetInternalTransactionsReply,
+                iterable_name="internalTransactions",
+                iterable_type=types.InternalTransaction,
+                limit=limit
+        ):
+            yield asset
 
-        yield from items
+    def get_internal_transactions_by_parent_hash_raw(
+            self,
+            request: types.GetInternalTransactionsByBlockNumberRequest,
+    ) -> types.GetInternalTransactionsReply:
+        reply = self.provider.call_method(
+            rpc="ankr_getInternalTransactionsByParentHash",
+            request=request,
+            reply=types.GetInternalTransactionsReply,
+        )
 
-        if reply.get('nextPageToken'):
-            request_params.page_token = reply.get('nextPageToken')
-            yield from self.call_method_paginated(
-                method=method,
-                request_params=request_params,
-                iterable_name=iterable_name,
-                limit=limit,
-                call_function=call_function,
-                body_type=body_type
-            )
-
-
+        return reply
 
 class AnkrQueryAPI(AnkrMultichainAPI):
-    def __init__(
-            self,
-            api_key: str,
-            # endpoint_uri: Optional[str] = None,
-    ) -> None:
-        super().__init__(api_key)
-        self.api = ankr_gen.QueryAPIApi(api_client=self.provider)
-
-    def __del__(self):
-        super().__del__()
-
     def get_logs(
         self,
-        blockchain: types.BlockchainNames,
-        from_block: Optional[types.BlockNumber] = None,
-        to_block: Optional[types.BlockNumber] = None,
-        address: Optional[types.AddressOrAddresses] = None,
-        topics: Optional[types.Topics] = None,
-        decode_logs: Optional[bool] = None,
+        request: types.GetLogsRequest,
         limit: Optional[int] = None,
-        **kwargs: Any,
-    ) -> Iterable[Any]:
-        for log in super().call_method_paginated(
-                method="ankr_getLogs",
-                request_params=ankr_gen.AnkrGetLogsParams(
-                    blockchain=blockchain,
-                    from_block=from_block,
-                    to_block=to_block,
-                    address=address,
-                    topics=topics,
-                    decode_logs=decode_logs,
-                    **kwargs
-                ),
+    ) -> Iterable[types.GetLogsReply]:
+        for log in self.provider.call_method_paginated(
+                rpc="ankr_getLogs",
+                request=request,
+                reply=types.GetLogsReply,
                 iterable_name="logs",
-                limit=limit,
-                call_function=self.api.ankr_get_logs_post,
-                body_type=ankr_gen.AnkrGetLogsBody
+                iterable_type=types.Log,
+                limit=limit
         ):
             yield log
+
+    def get_logs_raw(
+        self,
+        request: types.GetLogsRequest,
+    ) -> types.GetLogsReply:
+        reply = self.provider.call_method(
+                rpc="ankr_getLogs",
+                request=request,
+                reply=types.GetLogsReply,
+        )
+
+        return reply
 
 
     def get_blocks(
         self,
-        blockchain: types.BlockchainName,
-        from_block: Optional[types.BlockNumber] = None,
-        to_block: Optional[types.BlockNumber] = None,
-        desc_order: Optional[bool] = None,
-        include_logs: Optional[bool] = None,
-        include_txs: Optional[bool] = None,
-        decode_logs: Optional[bool] = None,
-        decode_tx_data: Optional[bool] = None,
-        **kwargs: Any,
-    ) -> List[Any]:
-        reply = super().call_method(
-            "ankr_getBlocks",
-            request_params = ankr_gen.AnkrGetBlocksParams(
-                blockchain=blockchain,
-                from_block=from_block,
-                to_block=to_block,
-                desc_order=desc_order,
-                include_logs=include_logs,
-                include_txs=include_txs,
-                decode_logs=decode_logs,
-                decode_tx_data=decode_tx_data,
-                **kwargs,
-            ),
-            call_function=self.api.ankr_get_blocks_post,
-            body_type=ankr_gen.AnkrGetBlocksBody
+        request: types_gen.GetBlocksRequest,
+    ) -> List[types_gen.Block]:
+        reply = self.provider.call_method(
+            rpc="ankr_getBlocks",
+            request=request,
+            reply=types_gen.GetBlocksReply,
+        )
+
+        return reply.blocks
+
+    def get_blocks_raw(
+        self,
+        request: types_gen.GetBlocksRequest,
+    ) -> types_gen.GetBlocksReply:
+        reply = self.provider.call_method(
+            rpc="ankr_getBlocks",
+            request=request,
+            reply=types_gen.GetBlocksReply,
         )
 
         return reply
+
 
     def get_transaction(
         self,
@@ -196,159 +207,243 @@ class AnkrQueryAPI(AnkrMultichainAPI):
 
 
 class AnkrTokenAPI(AnkrMultichainAPI):
-    def __init__(
+    def explain_token_price(
             self,
-            api_key: str,
-            # endpoint_uri: Optional[str] = None,
-    ) -> None:
-        super().__init__(api_key)
-        self.api = ankr_gen.TokenAPIApi(api_client=self.provider)
-
-    def __del__(self):
-        super().__del__()
-
-    def get_token_holders(
-        self,
-        blockchain: types.BlockchainName,
-        contract_address: str,
-        limit: Optional[int] = None,
-        **kwargs: Any,
-    ) -> Iterable[Any]:
-        for holder in super().call_method_paginated(
-                method="ankr_getTokenHolders",
-                request_params=ankr_gen.AnkrGetTokenHoldersParams(
-                    blockchain=blockchain,
-                    contract_address=contract_address,
-                    **kwargs,
-                ),
-                iterable_name="holders",
-                limit=limit,
-                call_function=self.api.ankr_get_token_holders_post,
-                body_type=ankr_gen.AnkrGetTokenHoldersBody
-        ):
-            yield holder
-
-    def get_token_holders_count_history(
-        self,
-        blockchain: types.BlockchainName,
-        contract_address: str,
-        limit: Optional[int] = None,
-        **kwargs: Any,
-    ) -> Iterable[Any]:
-        for daily_holder_count in super().call_method_paginated(
-                method="ankr_getTokenHoldersCount",
-                request_params=ankr_gen.AnkrGetTokenHoldersParams(
-                    blockchain=blockchain,
-                    contract_address=contract_address,
-                    **kwargs,
-                ),
-                iterable_name="holderCountHistory",
-                limit=limit,
-                call_function=self.api.ankr_get_token_holders_count_post,
-                body_type=ankr_gen.AnkrGetTokenHoldersCountBody
-        ):
-            yield daily_holder_count
-
-    def get_token_holders_count(
-        self,
-        blockchain: types.BlockchainName,
-        contract_address: str,
-        **kwargs: Any,
-    ) -> Any:
-        reply = super().call_method(
-            "ankr_getTokenHoldersCount",
-            request_params = ankr_gen.AnkrGetTokenHoldersParams(
-                blockchain=blockchain,
-                contract_address=contract_address,
-                page_size=1,
-                **kwargs,
-            ),
-            call_function=self.api.ankr_get_token_holders_count_post,
-            body_type=ankr_gen.AnkrGetTokenHoldersCountBody
+            request: types.ExplainTokenPriceRequest,
+    ) -> ([types.ExplainTokenPriceSinglePair],[types.PriceEstimate]):
+        reply = self.provider.call_method(
+            rpc="ankr_explainTokenPrice",
+            request=request,
+            reply=types.ExplainTokenPriceReply,
         )
 
-        if not reply['holderCountHistory'] or (
-                reply['holderCountHistory'] and len(reply['holderCountHistory']) < 1):
-            raise APIError("no token holders count found")
+        if reply.pairs and reply.priceEstimates:
+            return reply.pairs, reply.priceEstimates
+        elif reply.pairs:
+            return reply.pairs, []
+        elif reply.priceEstimates:
+            return [], reply.priceEstimates
+        else:
+            return [], []
 
-        return reply['holderCountHistory'][0]
-
-    def get_token_price(
-        self,
-        blockchain: types.BlockchainName,
-        contract_address: str,
-        **kwargs: Any,
-    ) -> str:
-        reply = super().call_method(
-            "ankr_getTokenPrice",
-            request_params = ankr_gen.AnkrGetTokenPriceParams(
-                blockchain=blockchain,
-                contract_address=contract_address,
-                **kwargs,
-            ),
-            call_function=self.api.ankr_get_token_price_post,
-            body_type=ankr_gen.AnkrGetTokenPriceBody
+    def explain_token_price_raw(
+            self,
+            request: types.ExplainTokenPriceRequest,
+    ) -> types.ExplainTokenPriceReply:
+        reply = self.provider.call_method(
+            rpc="ankr_explainTokenPrice",
+            request=request,
+            reply=types.ExplainTokenPriceReply,
         )
 
-
-        return reply['usdPrice']
+        return reply
 
     def get_account_balance(
-        self,
-        wallet_address: str,
-        blockchain: Optional[types.BlockchainNames] = None,
-        limit: Optional[int] = None,
-        **kwargs: Any,
-    ) -> Iterable[Any]:
-        for asset in super().call_method_paginated(
-                method="ankr_getAccountBalance",
-                request_params=ankr_gen.AnkrGetAccountBalanceParams(
-                    blockchain=blockchain,
-                    wallet_address=wallet_address,
-                    **kwargs,
-                ),
+            self,
+            request: types.GetAccountBalanceRequest,
+            limit: Optional[int] = None,
+    ) -> Iterable[types.Balance]:
+        for asset in self.provider.call_method_paginated(
+                rpc="ankr_getAccountBalance",
+                request=request,
+                reply=types.GetAccountBalanceReply,
                 iterable_name="assets",
-                limit=limit,
-                call_function=self.api.ankr_get_account_balance_post,
-                body_type=ankr_gen.AnkrGetAccountBalanceBody
+                iterable_type=types.Balance,
+                limit=limit
         ):
             yield asset
 
+    def get_account_balance_raw(
+            self,
+            request: types.GetAccountBalanceRequest,
+    ) -> types.GetAccountBalanceReply:
+        reply = self.provider.call_method(
+            rpc="ankr_getAccountBalance",
+            request=request,
+            reply=types.GetAccountBalanceReply,
+        )
+
+        return reply
+
+    def get_currencies(
+            self,
+            request: types.GetCurrenciesRequest,
+    ) -> List[types.CurrencyDetailsExtended]:
+        reply = self.provider.call_method(
+            rpc="ankr_getCurrencies",
+            request=request,
+            reply=types.GetCurrenciesReply,
+        )
+
+        return reply.currencies
+
+    def get_currencies_raw(
+            self,
+            request: types.GetCurrenciesRequest,
+    ) -> types.GetCurrenciesReply:
+        reply = self.provider.call_method(
+            rpc="ankr_getCurrencies",
+            request=request,
+            reply=types.GetCurrenciesReply,
+        )
+
+        return reply
+
+    def get_token_holders(
+            self,
+            request: types.GetTokenHoldersRequest,
+            limit: Optional[int] = None,
+    ) -> Iterable[types.HolderBalance]:
+        for asset in self.provider.call_method_paginated(
+                rpc="ankr_getTokenHolders",
+                request=request,
+                reply=types.GetTokenHoldersReply,
+                iterable_name="holders",
+                iterable_type=types.HolderBalance,
+                limit=limit
+        ):
+            yield asset
+
+    def get_token_holders_raw(
+            self,
+            request: types.GetTokenHoldersRequest,
+    ) -> types.GetTokenHoldersReply:
+        reply = self.provider.call_method(
+            rpc="ankr_getTokenHolders",
+            request=request,
+            reply=types.GetTokenHoldersReply,
+        )
+        return reply
+
+    def get_token_holders_count_history(
+            self,
+            request: types.GetTokenHoldersCountRequest,
+            limit: Optional[int] = None,
+    ) -> Iterable[types.DailyHolderCount]:
+        for holder in self.provider.call_method_paginated(
+                rpc="ankr_getTokenHoldersCount",
+                request=request,
+                reply=types.GetTokenHoldersCountReply,
+                iterable_name="holderCountHistory",
+                iterable_type=types.DailyHolderCount,
+                limit=limit
+        ):
+            yield holder
+
+    def get_token_holders_count_history_raw(
+            self,
+            request: types.GetTokenHoldersCountRequest,
+    ) -> types.GetTokenHoldersCountReply:
+        reply = self.provider.call_method(
+            rpc="ankr_getTokenHoldersCount",
+            request=request,
+            reply=types.GetTokenHoldersCountReply,
+        )
+        return reply
+
+    def get_token_holders_count(
+            self,
+            request: types.GetTokenHoldersCountRequest,
+    ) -> Iterable[types.DailyHolderCount]:
+        request.pageSize = 1
+        reply = self.provider.call_method(
+            rpc="ankr_getTokenHoldersCount",
+            request=request,
+            reply=types.GetTokenHoldersCountReply,
+        )
+        if len(reply.holderCountHistory) < 1:
+            raise APIError("no token holders count found")
+        return reply.holderCountHistory[0]
+
+    def get_token_holders_count_raw(
+            self,
+            request: types.GetTokenHoldersCountRequest,
+    ) -> types.GetTokenHoldersCountReply:
+        reply = self.provider.call_method(
+            rpc="ankr_getTokenHoldersCount",
+            request=request,
+            reply=types.GetTokenHoldersCountReply,
+        )
+        return reply
+
+    def get_token_price(
+        self,
+        request: types.GetTokenPriceRequest
+    ) -> str:
+        reply = self.provider.call_method(
+            rpc="ankr_getTokenPrice",
+            request=request,
+            reply=types.GetTokenPriceReply,
+        )
+        return reply.usdPrice
+
+    def get_token_price_raw(
+        self,
+        request: types.GetTokenPriceRequest
+    ) -> types.GetTokenPriceReply:
+        reply = self.provider.call_method(
+            rpc="ankr_getTokenPrice",
+            request=request,
+            reply=types.GetTokenPriceReply,
+        )
+        return reply
+
+    def get_token_transfers(
+        self,
+        request: types.GetTransfersRequest,
+        limit: Optional[int] = None
+    ) -> Iterable[types.TokenTransfer]:
+        for transfer in self.provider.call_method_paginated(
+                rpc="ankr_getTokenTransfers",
+                request=request,
+                reply=types.GetTokenTransfersReply,
+                iterable_name="transfers",
+                iterable_type=types.TokenTransfer,
+                limit=limit
+        ):
+            yield transfer
+
+    def get_token_transfers_raw(
+        self,
+        request: types.GetTransfersRequest
+    ) -> types.GetTokenTransfersReply:
+        reply = self.provider.call_method(
+            rpc="ankr_getTokenTransfers",
+            request=request,
+            reply=types.GetTokenTransfersReply,
+        )
+        return reply
+
+
 
 class AnkrNFTAPI(AnkrMultichainAPI):
-    def __init__(
-            self,
-            api_key: str,
-            # endpoint_uri: Optional[str] = None,
-    ) -> None:
-        super().__init__(api_key)
-        self.api = ankr_gen.NFTAPIApi(api_client=self.provider)
-
-    def __del__(self):
-        super().__del__()
-
     def get_nfts(
         self,
-        blockchain: types.BlockchainNames,
-        wallet_address: str,
-        filter: Optional[List[Dict[str, List[str]]]] = None,
+        request: types_gen.GetNFTsByOwnerRequest,
         limit: Optional[int] = None,
-        **kwargs: Any,
-    ) -> Iterable[Any]:
-        for nft in super().call_method_paginated(
-                method="ankr_getNFTsByOwner",
-                request_params=ankr_gen.AnkrGetNFTsByOwnerParams(
-                    blockchain=blockchain,
-                    wallet_address=wallet_address,
-                    filter=filter,
-                    **kwargs,
-                ),
+    ) -> Iterable[types_gen.GetNFTsByOwnerReply]:
+        for nft in self.provider.call_method_paginated(
+                rpc="ankr_getNFTsByOwner",
+                request=request,
+                reply=types_gen.GetNFTsByOwnerReply,
                 iterable_name="assets",
-                limit=limit,
-                call_function=self.api.ankr_get_nfts_by_owner_post,
-                body_type=ankr_gen.AnkrGetNFTsByOwnerBody
+                iterable_type=types_gen.Nft,
+                limit=limit
         ):
             yield nft
+
+    def get_nfts_raw(
+        self,
+        request: GetNFTsByOwnerRequest,
+        limit: Optional[int] = None,
+    ) -> GetNFTsByOwnerReply:
+        reply = self.provider.call_method(
+            rpc="ankr_getNFTsByOwner",
+            request=request,
+            reply=GetNFTsByOwnerReply,
+        )
+
+        return reply
 
     def get_nft_metadata(
         self,
@@ -390,5 +485,5 @@ class AnkrNFTAPI(AnkrMultichainAPI):
         )
 
 
-class AnkrAdvancedAPI(AnkrQueryAPI, AnkrTokenAPI, AnkrNFTAPI):
+class AnkrAdvancedAPI(AnkrEarlyAccessAPI, AnkrQueryAPI, AnkrTokenAPI, AnkrNFTAPI):
     ...

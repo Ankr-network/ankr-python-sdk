@@ -26,6 +26,9 @@ ankr_w3 = AnkrWeb3("YOUR-TOKEN")
 
 #### Node's API
 ```python3
+from ankr import AnkrWeb3
+ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+
 eth_block = ankr_w3.eth.get_block("latest")
 bsc_block = ankr_w3.bsc.get_block("latest")
 polygon_block = ankr_w3.polygon.get_block("latest")
@@ -34,37 +37,53 @@ polygon_block = ankr_w3.polygon.get_block("latest")
 #### Ankr NFT API 
 
 ```python3
-from ankr.types import Blockchain
+from ankr import AnkrWeb3
+from ankr.types import Blockchain, GetNFTsByOwnerRequest
+
+ankr_w3 = AnkrWeb3("YOUR-TOKEN")
 
 nfts = ankr_w3.nft.get_nfts(
-    blockchain=[Blockchain.ETH, Blockchain.BSC],
-    wallet_address="0x0E11A192d574b342C51be9e306694C41547185DD",
-    filter=[
-        {"0x700b4b9f39bb1faf5d0d16a20488f2733550bff4": []},
-        {"0xd8682bfa6918b0174f287b888e765b9a1b4dc9c3": ["8937"]},
-    ],
+    request=GetNFTsByOwnerRequest(
+        blockchain=Blockchain.Eth,
+        walletAddress="0x0E11A192d574b342C51be9e306694C41547185DD"
+    )
 )
 ```
 
 #### Ankr Token API
 ```python3
+from ankr import AnkrWeb3
+from ankr.types import GetAccountBalanceRequest
+
+ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+
 assets = ankr_w3.token.get_account_balance(
-    wallet_address="0x77A859A53D4de24bBC0CC80dD93Fbe391Df45527"
+    request=GetAccountBalanceRequest(
+        walletAddress="0x77A859A53D4de24bBC0CC80dD93Fbe391Df45527"
+    )
 )
 ```
 
 #### Ankr Query API
 ```python3
+from ankr import AnkrWeb3
+from ankr.types import Blockchain, GetLogsRequest
+
+ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+
 logs = ankr_w3.query.get_logs(
-    blockchain="eth",
-    from_block="0xdaf6b1",
-    to_block=14350010,
-    address=["0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"],
-    topics=[
-        [],
-        ["0x000000000000000000000000def1c0ded9bec7f1a1670819833240f027b25eff"],
-    ],
-    decode_logs=True,
+    request=GetLogsRequest(
+        blockchain=[Blockchain.Eth],
+        fromBlock=1181739,
+        toBlock=1181739,
+        address=["0x3589d05a1ec4af9f65b0e5554e645707775ee43c"],
+        topics=[
+            [],
+            ["0x000000000000000000000000feb92d30bf01ff9a1901666c5573532bfa07eeec"],
+        ],
+        decodeLogs=True,
+    ),
+    limit=10
 )
 ```
 
@@ -72,151 +91,320 @@ logs = ankr_w3.query.get_logs(
 
 `ankr-sdk` supports the following chains at this time:
 
-- ETH: `"eth"`
-- BSC: `"bsc"`
+Mainnet
+
+- Ethereum: `"eth"`
+- BNB Smart Chain: `"bsc"`
 - Polygon: `"polygon"`
 - Fantom: `"fantom"`
 - Arbitrum: `"arbitrum"`
 - Avalanche: `"avalanche"`
 - Syscoin NEVM: `"syscoin"`
+- Optimism: `"optimism"`
+- Polygon zkEVM: `"polygon_zkevm"`
+- Rollux: `"rollux"`
+- Base: `"base"`
+- Flare: `"flare"`
+- Gnosis Chain: `"gnosis"`
+- Scroll: `"scroll"`
+- Linea: `"linea"`
+
+Testnet
+
+- Ethereum Goerli: `"eth_goerli"`
+- Avalanche Fuji: `"avalanche_fuji"`
+- Polygon Mumbai: `"polygon_mumbai"`
+- Optimism Testnet: `"optimism_testnet"`
+
+Appchain
+
+- META Apes: `"bas_metaapes"`
+
+Appchain Testnet
+
+- META Apes Testnet: `"bas_metaapes_testnet"`
+
+When passing blockchain, you can use one available from `types.py` (preferred) or just a string value.  
 
 ## Available methods
 
 `ankr-sdk` supports the following methods:
 
-- [`nft.get_nfts`](#get_nfts)
-- [`nft.get_nft_metadata`](#get_nft_metadata)
-- `nft.get_nft_holders`
-- [`token.get_token_holders`](#get_token_holders)
-- [`token.get_token_holders_count_history`](#get_token_holders_count_history)
-- [`token.get_token_holders_count`](#get_token_holders_count)
-- `token.get_token_price`
-- [`token.get_account_balance`](#get_account_balance)
-- [`query.get_logs`](#get_logs)
-- [`query.get_blocks`](#get_blocks)
-- [`query.get_transaction`](#get_transaction)
+Early Access
 
-#### `get_nfts`
+- [`get_token_price_history`](#gettokenpricehistory--gettokenpricehistoryraw)
+- [`get_account_balance_historical`](#getaccountbalancehistorical--getaccountbalancehistoricalraw)
+- [`get_internal_transactions_by_block_number`](#getinternaltransactionsbyblocknumber--getinternaltransactionsbyblocknumberraw)
+- [`get_internal_transactions_by_parent_hash`](#getinternaltransactionsbyparenthash--getinternaltransactionsbyparenthashraw)
 
-Get data about all the NFTs (collectibles) owned by a wallet.
+Token API
 
-````python3
-import ankr
+- [`explain_token_price`](#explaintokenprice--explaintokenpriceraw)
+- [`get_account_balance`](#getaccountbalance--getaccountbalanceraw)
+- [`get_currencies`](#getcurrencies--getcurrenciesraw)
+- [`get_token_holders`](#gettokenholders--gettokenholdersraw)
+- [`get_token_holders_count_history`](#gettokenholderscounthistory--gettokenholderscounthistoryraw)
+- [`get_token_holders_count`](#gettokenholderscount--gettokenholderscountraw)
+- [`get_token_price`](#gettokenprice--gettokenpriceraw)
+- [`getTokenTransfers`](#gettokentransfers--gettokentransfersraw)
 
-nfts = ankr.advanced_apis.AnkrNFTAPI.get_nfts(
-    blockchain="eth",
-    wallet_address="0x0E11A192d574b342C51be9e306694C41547185DD",
-    filter=[
-        {"0x700b4b9f39bb1faf5d0d16a20488f2733550bff4": []},
-        {"0xd8682bfa6918b0174f287b888e765b9a1b4dc9c3": ["8937"]},
-    ],
-)
-````
+NFT API
 
-#### `get_nft_metadata`
+- [`getNFTsByOwner`](#getnftsbyowner)
+- [`getNFTMetadata`](#getnftmetadata)
+- [`getNFTHolders`](#getnftholders)
+- [`getNftTransfers`](#getnfttransfers)
 
-Get metadata of NFT.
+Query API
 
-````python3
-nfts = ankr_w3.nft.get_nft_metadata(
-    blockchain="eth",
-    contract_address="0x4100670ee2f8aef6c47a4ed13c7f246e621228ec",
-    token_id="4",
-)
-````
+- [`getLogs`](#getlogs)
+- [`getBlocks`](#getblocks)
+- [`getTransactionsByHash`](#gettransactionsbyhash)
+- [`getTransactionsByAddress`](#gettransactionsbyaddress)
+- [`getBlockchainStats`](#getblockchainstats)
+- [`getInteractions`](#getinteractions)
 
-#### `get_token_holders`
 
-Get holders of a token.
+Note: some methods are available in *_raw format, allowing to get full reply with syncStatus and control pagination by hands.
 
-````python3
-holders = ankr_w3.token.get_token_holders(
-    blockchain="bsc",
-    contract_address="0xf307910A4c7bbc79691fD374889b36d8531B08e3",
-    limit=10,
-)
-````
+### Pagination
 
-#### `get_token_holders_count_history`
+- methods with *_raw ending support customized pagination, where you are controlling it, using `pageSize` and `pageToken`
+- other methods support automatic pagination, DON'T use `pageSize` and `pageToken` fields to these methods
 
-Get token holders count daily history.
+---
 
-````python3
-daily_holders_history = ankr_w3.token.get_token_holders_count_history(
-    blockchain="bsc",
-    contract_address="0xf307910A4c7bbc79691fD374889b36d8531B08e3",
-    limit=10,  # last 10 days history
-)
-````
+## Examples
 
-#### `get_token_holders_count`
+### Early Access API
 
-Get token holders count at the latest block.
-
-````python3
-holders_count = ankr_w3.token.get_token_holders_count(
-    blockchain="bsc",
-    contract_address="0xf307910A4c7bbc79691fD374889b36d8531B08e3",
-)
-````
-
-#### `get_account_balance`
-
-Get account assets.
-
-````python3
-assets = ankr_w3.token.get_account_balance(
-    wallet_address="0x77A859A53D4de24bBC0CC80dD93Fbe391Df45527",
-    blockchain=["eth", "bsc"],
-)
-````
-
-#### `get_logs`
-
-Get logs matching the filter.
-
+#### `get_token_price_history` / `get_token_price_history_raw`
 ```python3
-logs = ankr_w3.query.get_logs(
-    blockchain="eth",
-    from_block="0xdaf6b1",
-    to_block=14350010,
-    address=["0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"],
-    topics=[
-        [],
-        ["0x000000000000000000000000def1c0ded9bec7f1a1670819833240f027b25eff"],
-    ],
-    decode_logs=True,
+from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr.types import Blockchain, GetTokenPriceHistoryRequest
+
+ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+
+result = AnkrAdvancedAPI.get_token_price_history(
+    request=GetTokenPriceHistoryRequest(
+        blockchain=Blockchain.Eth,
+        contractAddress='0x50327c6c5a14dcade707abad2e27eb517df87ab5',
+        toTimestamp=1696970653,
+        interval=100,
+        limit=10
+    )
 )
+print(result)
 ```
 
-#### `get_blocks`
-
-Query data about blocks within a specified range.
-
+#### `get_account_balance_historical` / `get_account_balance_historical_raw`
 ```python3
-blocks = ankr_w3.query.get_blocks(
-    blockchain="eth",
-    from_block=14500001,
-    to_block=14500001,
-    desc_order=True,
-    include_logs=True,
-    include_txs=True,
-    decode_logs=True,
+from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr.types import Blockchain, GetAccountBalanceHistoricalRequest
+
+ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+
+result = AnkrAdvancedAPI.get_account_balance_historical(
+    request=GetAccountBalanceHistoricalRequest(
+        blockchain=Blockchain.Eth,
+        walletAddress='vitalik.eth',
+        onlyWhitelisted=False,
+        blockHeight=17967813,
+    )
 )
+print(result)
 ```
 
-#### `get_transaction`
+#### `get_internal_transactions_by_block_number` / `get_internal_transactions_by_block_number_raw`
+```python3
+from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr.types import Blockchain, GetInternalTransactionsByBlockNumberRequest
 
-Get Transaction by hash.
+ankr_w3 = AnkrWeb3("YOUR-TOKEN")
 
-````python3
-tx = ankr_w3.query.get_transaction(
-    transaction_hash="0x82c13aaac6f0b6471afb94a3a64ae89d45baa3608ad397621dbb0d847f51196f",
-    include_logs=True,
-    decode_logs=True,
-    decode_tx_data=True,
+result = AnkrAdvancedAPI.get_internal_transactions_by_block_number(
+    request=GetInternalTransactionsByBlockNumberRequest(
+        blockchain=Blockchain.Eth,
+        blockNumber=10000000,
+        onlyWithValue=True,
+    )
 )
-````
+for transaction in result:
+    print(transaction)
+```
+
+#### `get_internal_transactions_by_parent_hash` / `get_internal_transactions_by_parent_hash_raw`
+```python3
+from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr.types import Blockchain, GetInternalTransactionsByParentHashRequest
+
+ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+
+result = AnkrAdvancedAPI.get_internal_transactions_by_parent_hash(
+    request=GetInternalTransactionsByParentHashRequest(
+        blockchain=Blockchain.Eth,
+        parentTransactionHash='0xa50f8744e65cb76f66f9d54499d5401866a75d93db2e784952f55205afc3acc5',
+        onlyWithValue=True,
+    )
+)
+for transaction in result:
+    print(transaction)
+```
+
+### Token API
+
+#### `explain_token_price` / `explain_token_price_raw`
+
+```python3
+from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr.types import Blockchain, ExplainTokenPriceRequest
+
+ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+
+pairs, estimates = AnkrAdvancedAPI.explain_token_price(
+    request=ExplainTokenPriceRequest(
+        blockchain=Blockchain.Eth,
+        tokenAddress='0x8290333cef9e6d528dd5618fb97a76f268f3edd4',
+        blockHeight=17463534,
+    )
+)
+
+print(pairs)
+print(estimates)
+```
+
+#### `get_account_balance` / `get_account_balance_raw`
+
+```python3
+from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr.types import GetAccountBalanceRequest
+
+ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+
+result = AnkrAdvancedAPI.get_account_balance(
+    request=GetAccountBalanceRequest(
+        walletAddress="0x77A859A53D4de24bBC0CC80dD93Fbe391Df45527"
+    )
+)
+
+for balance in result:
+    print(balance)
+```
+
+#### `get_currencies` / `get_currencies_raw`
+
+```python3
+from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr.types import Blockchain, GetCurrenciesRequest
+
+ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+
+result = AnkrAdvancedAPI.get_currencies(
+    request=GetCurrenciesRequest(
+        blockchain=Blockchain.Fantom,
+    )
+)
+
+for currency in result:
+    print(currency)
+```
+
+#### `get_token_holders` / `get_token_holders_raw`
+
+```python3
+from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr.types import Blockchain, GetTokenHoldersRequest
+
+ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+
+result = AnkrAdvancedAPI.get_token_holders(
+    request=GetTokenHoldersRequest(
+        blockchain=Blockchain.Eth,
+        contractAddress='0xdac17f958d2ee523a2206206994597c13d831ec7',
+    )
+)
+
+for balance in result:
+    print(balance)
+```
+
+#### `get_token_holders_count_history` / `get_token_holders_count_history_raw`
+
+```python3
+from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr.types import Blockchain, GetTokenHoldersCountRequest
+
+ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+
+result = AnkrAdvancedAPI.get_token_holders_count_history_raw(
+    request=GetTokenHoldersCountRequest(
+        blockchain=Blockchain.Eth,
+        contractAddress='0xdAC17F958D2ee523a2206206994597C13D831ec7',
+    )
+)
+
+for balance in result:
+    print(balance)
+```
+
+#### `get_token_holders_count` / `get_token_holders_count_raw`
+
+```python3
+from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr.types import Blockchain, GetTokenHoldersCountRequest
+
+ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+
+result = AnkrAdvancedAPI.get_token_holders_count_history_raw(
+    request=GetTokenHoldersCountRequest(
+        blockchain=Blockchain.Eth,
+        contractAddress='0xdAC17F958D2ee523a2206206994597C13D831ec7',
+    )
+)
+
+print(result)
+```
+
+#### `get_token_price` / `get_token_price_raw`
+
+```python3
+from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr.types import Blockchain, GetTokenPriceRequest
+
+ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+
+result = AnkrAdvancedAPI.get_token_price(
+    request=GetTokenPriceRequest(
+        blockchain=Blockchain.Eth,
+        contractAddress='',
+    )
+)
+
+print(result)
+```
+
+#### `get_token_transfers` / `get_token_transfers_raw`
+
+```python3
+from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr.types import Blockchain, GetTransfersRequest
+
+ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+
+result = AnkrAdvancedAPI.get_token_transfers(
+    request=GetTransfersRequest(
+        blockchain=Blockchain.Eth,
+        address=['0xf16e9b0d03470827a95cdfd0cb8a8a3b46969b91'],
+        fromTimestamp=1674441035,
+        toTimestamp=1674441035,
+        descOrder=True,
+    )
+)
+
+for transfer in result:
+    print(result)
+```
+
 
 
 ### About API keys
