@@ -20,13 +20,13 @@ class MethodInput:
 
 class Method:
     def __init__(
-            self,
-            id: str,
-            inputs: List[MethodInput],
-            name: str,
-            signature: str,
-            string: str,
-            verified: bool,
+        self,
+        id: str,
+        inputs: List[MethodInput],
+        name: str,
+        signature: str,
+        string: str,
+        verified: bool,
     ):
         self.id = id
         self.inputs = inputs
@@ -38,7 +38,7 @@ class Method:
 
 class EventInput:
     def __init__(
-            self, indexed: bool, name: str, size: float, type: str, valueDecoded: str
+        self, indexed: bool, name: str, size: float, type: str, valueDecoded: str
     ):
         self.indexed = indexed
         self.name = name
@@ -49,14 +49,14 @@ class EventInput:
 
 class Event:
     def __init__(
-            self,
-            anonymous: bool,
-            id: str,
-            inputs: List[EventInput],
-            name: str,
-            signature: str,
-            string: str,
-            verified: bool,
+        self,
+        anonymous: bool,
+        id: str,
+        inputs: List[EventInput],
+        name: str,
+        signature: str,
+        string: str,
+        verified: bool,
     ):
         self.anonymous = anonymous
         self.id = id
@@ -69,18 +69,18 @@ class Event:
 
 class Log:
     def __init__(
-            self,
-            address: str,
-            blockHash: str,
-            blockNumber: str,
-            blockchain: Blockchain,
-            data: str,
-            logIndex: str,
-            removed: bool,
-            topics: List[str],
-            transactionHash: str,
-            transactionIndex: str,
-            event: Event = None,
+        self,
+        address: str,
+        blockHash: str,
+        blockNumber: str,
+        blockchain: Blockchain,
+        data: str,
+        logIndex: str,
+        removed: bool,
+        topics: List[str],
+        transactionHash: str,
+        transactionIndex: str,
+        event: Event = None,
     ):
         self.address = address
         self.blockHash = blockHash
@@ -97,30 +97,30 @@ class Log:
 
 class Transaction:
     def __init__(
-            self,
-            blockHash: str,
-            blockNumber: str,
-            from_: str,
-            transactionIndex: str,
-            value: str,
-            gasPrice: str = None,
-            gas: str = None,
-            contractAddress: str = None,
-            cumulativeGasUsed: str = None,
-            input: str = None,
-            v: str = None,
-            r: str = None,
-            s: str = None,
-            method: Method = None,
-            to: str = None,
-            nonce: str = None,
-            gasUsed: str = None,
-            logs: List[Log] = None,
-            hash: str = None,
-            status: str = None,
-            blockchain: str = None,
-            timestamp: str = None,
-            type: str = None,
+        self,
+        blockHash: str,
+        blockNumber: str,
+        from_: str,
+        transactionIndex: str,
+        value: str,
+        gasPrice: str = None,
+        gas: str = None,
+        contractAddress: str = None,
+        cumulativeGasUsed: str = None,
+        input: str = None,
+        v: str = None,
+        r: str = None,
+        s: str = None,
+        method: Method = None,
+        to: str = None,
+        nonce: str = None,
+        gasUsed: str = None,
+        logs: List[Log] = None,
+        hash: str = None,
+        status: str = None,
+        blockchain: str = None,
+        timestamp: str = None,
+        type: str = None,
     ):
         self.blockHash = blockHash
         self.blockNumber = blockNumber
@@ -149,28 +149,28 @@ class Transaction:
 
 class Block:
     def __init__(
-            self,
-            difficulty: str,
-            extraData: str,
-            gasLimit: str,
-            gasUsed: str,
-            hash: str,
-            logsBloom: str,
-            miner: str,
-            mixHash: str,
-            nonce: str,
-            number: str,
-            parentHash: str,
-            receiptsRoot: str,
-            sha3Uncles: str,
-            size: str,
-            stateRoot: str,
-            timestamp: str,
-            totalDifficulty: str,
-            transactions: List[Transaction],
-            transactionsRoot: str,
-            uncles: List[str],
-            blockchain: str = None,
+        self,
+        difficulty: str,
+        extraData: str,
+        gasLimit: str,
+        gasUsed: str,
+        hash: str,
+        logsBloom: str,
+        miner: str,
+        mixHash: str,
+        nonce: str,
+        number: str,
+        parentHash: str,
+        receiptsRoot: str,
+        sha3Uncles: str,
+        size: str,
+        stateRoot: str,
+        timestamp: str,
+        totalDifficulty: str,
+        transactions: List[Transaction],
+        transactionsRoot: str,
+        uncles: List[str],
+        blockchain: str = None,
     ):
         self.difficulty = difficulty
         self.extraData = extraData
@@ -210,20 +210,20 @@ class GetBlocksReply:
 
 class GetBlocksRequest:
     def __init__(
-            self,
-            blockchain: Blockchain,
-            fromBlock: float
-                       | Literal[Literal["latest"]]
-                       | Literal[Literal["earliest"]] = None,
-            toBlock: float
-                     | Literal[Literal["latest"]]
-                     | Literal[Literal["earliest"]] = None,
-            descOrder: bool = None,
-            includeLogs: bool = None,
-            includeTxs: bool = None,
-            decodeLogs: bool = None,
-            decodeTxData: bool = None,
-            syncCheck: bool = None,
+        self,
+        blockchain: Blockchain,
+        fromBlock: float
+        | Literal[Literal["latest"]]
+        | Literal[Literal["earliest"]] = None,
+        toBlock: float
+        | Literal[Literal["latest"]]
+        | Literal[Literal["earliest"]] = None,
+        descOrder: bool = None,
+        includeLogs: bool = None,
+        includeTxs: bool = None,
+        decodeLogs: bool = None,
+        decodeTxData: bool = None,
+        syncCheck: bool = None,
     ):
         self.blockchain = blockchain
         self.fromBlock = fromBlock
@@ -275,13 +275,13 @@ class GetTransactionsByHashReply:
 
 class GetTransactionsByHashRequest:
     def __init__(
-            self,
-            transactionHash: str,
-            blockchain: Blockchain | List[Blockchain] = None,
-            includeLogs: bool = None,
-            decodeLogs: bool = None,
-            decodeTxData: bool = None,
-            syncCheck: bool = None,
+        self,
+        transactionHash: str,
+        blockchain: Blockchain | List[Blockchain] = None,
+        includeLogs: bool = None,
+        decodeLogs: bool = None,
+        decodeTxData: bool = None,
+        syncCheck: bool = None,
     ):
         self.transactionHash = transactionHash
         self.blockchain = blockchain
@@ -314,10 +314,10 @@ class GetTransactionsByHashRequest:
 
 class GetTransactionsByAddressReply:
     def __init__(
-            self,
-            nextPageToken: str,
-            transactions: List[Transaction],
-            syncStatus: SyncStatus = None,
+        self,
+        nextPageToken: str,
+        transactions: List[Transaction],
+        syncStatus: SyncStatus = None,
     ):
         self.nextPageToken = nextPageToken
         self.transactions = transactions
@@ -334,26 +334,26 @@ class GetTransactionsByAddressReply:
 
 class GetTransactionsByAddressRequest:
     def __init__(
-            self,
-            address: List[str],
-            blockchain: Blockchain | List[Blockchain],
-            fromBlock: float
-                       | Literal[Literal["latest"]]
-                       | Literal[Literal["earliest"]] = None,
-            toBlock: float
-                     | Literal[Literal["latest"]]
-                     | Literal[Literal["earliest"]] = None,
-            fromTimestamp: float
-                           | Literal[Literal["latest"]]
-                           | Literal[Literal["earliest"]] = None,
-            toTimestamp: float
-                         | Literal[Literal["latest"]]
-                         | Literal[Literal["earliest"]] = None,
-            pageToken: str = None,
-            pageSize: float = None,
-            descOrder: bool = None,
-            includeLogs: bool = None,
-            syncCheck: bool = None,
+        self,
+        address: List[str],
+        blockchain: Blockchain | List[Blockchain],
+        fromBlock: float
+        | Literal[Literal["latest"]]
+        | Literal[Literal["earliest"]] = None,
+        toBlock: float
+        | Literal[Literal["latest"]]
+        | Literal[Literal["earliest"]] = None,
+        fromTimestamp: float
+        | Literal[Literal["latest"]]
+        | Literal[Literal["earliest"]] = None,
+        toTimestamp: float
+        | Literal[Literal["latest"]]
+        | Literal[Literal["earliest"]] = None,
+        pageToken: str = None,
+        pageSize: float = None,
+        descOrder: bool = None,
+        includeLogs: bool = None,
+        syncCheck: bool = None,
     ):
         self.address = address
         self.blockchain = blockchain
@@ -396,7 +396,7 @@ class GetTransactionsByAddressRequest:
 
 class GetLogsReply:
     def __init__(
-            self, logs: List[Log], nextPageToken: str = None, syncStatus: SyncStatus = None
+        self, logs: List[Log], nextPageToken: str = None, syncStatus: SyncStatus = None
     ):
         self.logs = logs
         self.nextPageToken = nextPageToken
@@ -413,27 +413,27 @@ class GetLogsReply:
 
 class GetLogsRequest:
     def __init__(
-            self,
-            blockchain: Blockchain | List[Blockchain],
-            fromBlock: float
-                       | Literal[Literal["latest"]]
-                       | Literal[Literal["earliest"]] = None,
-            toBlock: float
-                     | Literal[Literal["latest"]]
-                     | Literal[Literal["earliest"]] = None,
-            fromTimestamp: float
-                           | Literal[Literal["latest"]]
-                           | Literal[Literal["earliest"]] = None,
-            toTimestamp: float
-                         | Literal[Literal["latest"]]
-                         | Literal[Literal["earliest"]] = None,
-            address: List[str] = None,
-            topics: List[str | List[str]] = None,
-            pageToken: str = None,
-            pageSize: float = None,
-            descOrder: bool = None,
-            decodeLogs: bool = None,
-            syncCheck: bool = None,
+        self,
+        blockchain: Blockchain | List[Blockchain],
+        fromBlock: float
+        | Literal[Literal["latest"]]
+        | Literal[Literal["earliest"]] = None,
+        toBlock: float
+        | Literal[Literal["latest"]]
+        | Literal[Literal["earliest"]] = None,
+        fromTimestamp: float
+        | Literal[Literal["latest"]]
+        | Literal[Literal["earliest"]] = None,
+        toTimestamp: float
+        | Literal[Literal["latest"]]
+        | Literal[Literal["earliest"]] = None,
+        address: List[str] = None,
+        topics: List[str | List[str]] = None,
+        pageToken: str = None,
+        pageSize: float = None,
+        descOrder: bool = None,
+        decodeLogs: bool = None,
+        syncCheck: bool = None,
     ):
         self.blockchain = blockchain
         self.fromBlock = fromBlock
@@ -478,13 +478,13 @@ class GetLogsRequest:
 
 class BlockchainStats:
     def __init__(
-            self,
-            blockTimeMs: float,
-            blockchain: str,
-            latestBlockNumber: float,
-            nativeCoinUsdPrice: str,
-            totalEventsCount: float,
-            totalTransactionsCount: float,
+        self,
+        blockTimeMs: float,
+        blockchain: str,
+        latestBlockNumber: float,
+        nativeCoinUsdPrice: str,
+        totalEventsCount: float,
+        totalTransactionsCount: float,
     ):
         self.blockTimeMs = blockTimeMs
         self.blockchain = blockchain
@@ -509,7 +509,7 @@ class GetBlockchainStatsReply:
 
 class GetBlockchainStatsRequest:
     def __init__(
-            self, blockchain: Blockchain | List[Blockchain] = None, syncCheck: bool = None
+        self, blockchain: Blockchain | List[Blockchain] = None, syncCheck: bool = None
     ):
         self.blockchain = blockchain
         self.syncCheck = syncCheck
@@ -559,19 +559,19 @@ class GetInteractionsRequest:
 
 class Balance:
     def __init__(
-            self,
-            balance: str,
-            balanceRawInteger: str,
-            balanceUsd: str,
-            blockchain: Blockchain,
-            holderAddress: str,
-            thumbnail: str,
-            tokenDecimals: float,
-            tokenName: str,
-            tokenPrice: str,
-            tokenSymbol: str,
-            tokenType: str,
-            contractAddress: str = None,
+        self,
+        balance: str,
+        balanceRawInteger: str,
+        balanceUsd: str,
+        blockchain: Blockchain,
+        holderAddress: str,
+        thumbnail: str,
+        tokenDecimals: float,
+        tokenName: str,
+        tokenPrice: str,
+        tokenSymbol: str,
+        tokenType: str,
+        contractAddress: str = None,
     ):
         self.balance = balance
         self.balanceRawInteger = balanceRawInteger
@@ -589,12 +589,12 @@ class Balance:
 
 class GetAccountBalanceReply:
     def __init__(
-            self,
-            assets: List[Balance],
-            totalBalanceUsd: str,
-            totalCount: float,
-            nextPageToken: str = None,
-            syncStatus: SyncStatus = None,
+        self,
+        assets: List[Balance],
+        totalBalanceUsd: str,
+        totalCount: float,
+        nextPageToken: str = None,
+        syncStatus: SyncStatus = None,
     ):
         self.assets = assets
         self.totalBalanceUsd = totalBalanceUsd
@@ -615,14 +615,14 @@ class GetAccountBalanceReply:
 
 class GetAccountBalanceRequest:
     def __init__(
-            self,
-            walletAddress: str,
-            blockchain: Blockchain | List[Blockchain] = None,
-            onlyWhitelisted: bool = None,
-            nativeFirst: bool = None,
-            pageToken: str = None,
-            pageSize: float = None,
-            syncCheck: bool = None,
+        self,
+        walletAddress: str,
+        blockchain: Blockchain | List[Blockchain] = None,
+        onlyWhitelisted: bool = None,
+        nativeFirst: bool = None,
+        pageToken: str = None,
+        pageSize: float = None,
+        syncCheck: bool = None,
     ):
         self.walletAddress = walletAddress
         self.blockchain = blockchain
@@ -657,11 +657,11 @@ class GetAccountBalanceRequest:
 
 class GetTokenPriceReply:
     def __init__(
-            self,
-            blockchain: Blockchain,
-            usdPrice: str,
-            contractAddress: str = None,
-            syncStatus: SyncStatus = None,
+        self,
+        blockchain: Blockchain,
+        usdPrice: str,
+        contractAddress: str = None,
+        syncStatus: SyncStatus = None,
     ):
         self.blockchain = blockchain
         self.usdPrice = usdPrice
@@ -680,10 +680,10 @@ class GetTokenPriceReply:
 
 class GetTokenPriceRequest:
     def __init__(
-            self,
-            blockchain: Blockchain,
-            contractAddress: str = None,
-            syncCheck: bool = None,
+        self,
+        blockchain: Blockchain,
+        contractAddress: str = None,
+        syncCheck: bool = None,
     ):
         self.blockchain = blockchain
         self.contractAddress = contractAddress
@@ -717,14 +717,14 @@ class HolderBalance:
 
 class GetTokenHoldersReply:
     def __init__(
-            self,
-            blockchain: Blockchain,
-            contractAddress: str,
-            holders: List[HolderBalance],
-            holdersCount: float,
-            nextPageToken: str,
-            tokenDecimals: float,
-            syncStatus: SyncStatus = None,
+        self,
+        blockchain: Blockchain,
+        contractAddress: str,
+        holders: List[HolderBalance],
+        holdersCount: float,
+        nextPageToken: str,
+        tokenDecimals: float,
+        syncStatus: SyncStatus = None,
     ):
         self.blockchain = blockchain
         self.contractAddress = contractAddress
@@ -749,12 +749,12 @@ class GetTokenHoldersReply:
 
 class GetTokenHoldersRequest:
     def __init__(
-            self,
-            blockchain: Blockchain,
-            contractAddress: str,
-            pageToken: str = None,
-            pageSize: float = None,
-            syncCheck: bool = None,
+        self,
+        blockchain: Blockchain,
+        contractAddress: str,
+        pageToken: str = None,
+        pageSize: float = None,
+        syncCheck: bool = None,
     ):
         self.blockchain = blockchain
         self.contractAddress = contractAddress
@@ -785,11 +785,11 @@ class GetTokenHoldersRequest:
 
 class DailyHolderCount:
     def __init__(
-            self,
-            holderCount: float,
-            lastUpdatedAt: str,
-            totalAmount: str,
-            totalAmountRawInteger: str,
+        self,
+        holderCount: float,
+        lastUpdatedAt: str,
+        totalAmount: str,
+        totalAmountRawInteger: str,
     ):
         self.holderCount = holderCount
         self.lastUpdatedAt = lastUpdatedAt
@@ -799,14 +799,14 @@ class DailyHolderCount:
 
 class GetTokenHoldersCountReply:
     def __init__(
-            self,
-            blockchain: Blockchain,
-            contractAddress: str,
-            holderCountHistory: List[DailyHolderCount],
-            latestHoldersCount: float,
-            nextPageToken: str,
-            tokenDecimals: float,
-            syncStatus: SyncStatus = None,
+        self,
+        blockchain: Blockchain,
+        contractAddress: str,
+        holderCountHistory: List[DailyHolderCount],
+        latestHoldersCount: float,
+        nextPageToken: str,
+        tokenDecimals: float,
+        syncStatus: SyncStatus = None,
     ):
         self.blockchain = blockchain
         self.contractAddress = contractAddress
@@ -831,12 +831,12 @@ class GetTokenHoldersCountReply:
 
 class GetTokenHoldersCountRequest:
     def __init__(
-            self,
-            blockchain: Blockchain,
-            contractAddress: str,
-            pageToken: str = None,
-            pageSize: float = None,
-            syncCheck: bool = None,
+        self,
+        blockchain: Blockchain,
+        contractAddress: str,
+        pageToken: str = None,
+        pageSize: float = None,
+        syncCheck: bool = None,
     ):
         self.blockchain = blockchain
         self.contractAddress = contractAddress
@@ -867,13 +867,13 @@ class GetTokenHoldersCountRequest:
 
 class CurrencyDetailsExtended:
     def __init__(
-            self,
-            blockchain: Blockchain,
-            decimals: float,
-            name: str,
-            symbol: str,
-            thumbnail: str,
-            address: str = None,
+        self,
+        blockchain: Blockchain,
+        decimals: float,
+        name: str,
+        symbol: str,
+        thumbnail: str,
+        address: str = None,
     ):
         self.blockchain = blockchain
         self.decimals = decimals
@@ -885,7 +885,7 @@ class CurrencyDetailsExtended:
 
 class GetCurrenciesReply:
     def __init__(
-            self, currencies: List[CurrencyDetailsExtended], syncStatus: SyncStatus = None
+        self, currencies: List[CurrencyDetailsExtended], syncStatus: SyncStatus = None
     ):
         self.currencies = currencies
         self.syncStatus = syncStatus
@@ -923,21 +923,21 @@ class GetCurrenciesRequest:
 
 class TokenTransfer:
     def __init__(
-            self,
-            blockHeight: float,
-            blockchain: str,
-            thumbnail: str,
-            timestamp: float,
-            tokenDecimals: float,
-            tokenName: str,
-            tokenSymbol: str,
-            transactionHash: str,
-            value: str,
-            valueRawInteger: str,
-            fromAddress: str = None,
-            contractAddress: str = None,
-            toAddress: str = None,
-            direction: str = None,
+        self,
+        blockHeight: float,
+        blockchain: str,
+        thumbnail: str,
+        timestamp: float,
+        tokenDecimals: float,
+        tokenName: str,
+        tokenSymbol: str,
+        transactionHash: str,
+        value: str,
+        valueRawInteger: str,
+        fromAddress: str = None,
+        contractAddress: str = None,
+        toAddress: str = None,
+        direction: str = None,
     ):
         self.blockHeight = blockHeight
         self.blockchain = blockchain
@@ -957,10 +957,10 @@ class TokenTransfer:
 
 class GetTokenTransfersReply:
     def __init__(
-            self,
-            transfers: List[TokenTransfer],
-            nextPageToken: str = None,
-            syncStatus: SyncStatus = None,
+        self,
+        transfers: List[TokenTransfer],
+        nextPageToken: str = None,
+        syncStatus: SyncStatus = None,
     ):
         self.transfers = transfers
         self.nextPageToken = nextPageToken
@@ -977,25 +977,25 @@ class GetTokenTransfersReply:
 
 class GetTransfersRequest:
     def __init__(
-            self,
-            blockchain: Blockchain | List[Blockchain],
-            fromBlock: float
-                       | Literal[Literal["latest"]]
-                       | Literal[Literal["earliest"]] = None,
-            toBlock: float
-                     | Literal[Literal["latest"]]
-                     | Literal[Literal["earliest"]] = None,
-            fromTimestamp: float
-                           | Literal[Literal["latest"]]
-                           | Literal[Literal["earliest"]] = None,
-            toTimestamp: float
-                         | Literal[Literal["latest"]]
-                         | Literal[Literal["earliest"]] = None,
-            address: List[str] = None,
-            pageToken: str = None,
-            pageSize: float = None,
-            descOrder: bool = None,
-            syncCheck: bool = None,
+        self,
+        blockchain: Blockchain | List[Blockchain],
+        fromBlock: float
+        | Literal[Literal["latest"]]
+        | Literal[Literal["earliest"]] = None,
+        toBlock: float
+        | Literal[Literal["latest"]]
+        | Literal[Literal["earliest"]] = None,
+        fromTimestamp: float
+        | Literal[Literal["latest"]]
+        | Literal[Literal["earliest"]] = None,
+        toTimestamp: float
+        | Literal[Literal["latest"]]
+        | Literal[Literal["earliest"]] = None,
+        address: List[str] = None,
+        pageToken: str = None,
+        pageSize: float = None,
+        descOrder: bool = None,
+        syncCheck: bool = None,
     ):
         self.blockchain = blockchain
         self.fromBlock = fromBlock
@@ -1042,20 +1042,20 @@ class Trait:
 
 class Nft:
     def __init__(
-            self,
-            blockchain: Blockchain,
-            collectionName: str,
-            contractAddress: str,
-            contractType: Literal[
-                Literal["ERC721"], Literal["ERC1155"], Literal["UNDEFINED"]
-            ],
-            imageUrl: str,
-            name: str,
-            symbol: str,
-            tokenId: str,
-            tokenUrl: str,
-            quantity: str = None,
-            traits: List[Trait] = None,
+        self,
+        blockchain: Blockchain,
+        collectionName: str,
+        contractAddress: str,
+        contractType: Literal[
+            Literal["ERC721"], Literal["ERC1155"], Literal["UNDEFINED"]
+        ],
+        imageUrl: str,
+        name: str,
+        symbol: str,
+        tokenId: str,
+        tokenUrl: str,
+        quantity: str = None,
+        traits: List[Trait] = None,
     ):
         self.blockchain = blockchain
         self.collectionName = collectionName
@@ -1072,11 +1072,11 @@ class Nft:
 
 class GetNFTsByOwnerReply:
     def __init__(
-            self,
-            assets: List[Nft],
-            nextPageToken: str,
-            owner: str,
-            syncStatus: SyncStatus = None,
+        self,
+        assets: List[Nft],
+        nextPageToken: str,
+        owner: str,
+        syncStatus: SyncStatus = None,
     ):
         self.assets = assets
         self.nextPageToken = nextPageToken
@@ -1095,13 +1095,13 @@ class GetNFTsByOwnerReply:
 
 class GetNFTsByOwnerRequest:
     def __init__(
-            self,
-            walletAddress: str,
-            blockchain: Blockchain | List[Blockchain] = None,
-            filter: List[Dict[str, List[str]]] = None,
-            pageToken: str = None,
-            pageSize: float = None,
-            syncCheck: bool = None,
+        self,
+        walletAddress: str,
+        blockchain: Blockchain | List[Blockchain] = None,
+        filter: List[Dict[str, List[str]]] = None,
+        pageToken: str = None,
+        pageSize: float = None,
+        syncCheck: bool = None,
     ):
         self.walletAddress = walletAddress
         self.blockchain = blockchain
@@ -1134,15 +1134,15 @@ class GetNFTsByOwnerRequest:
 
 class NftAttributes:
     def __init__(
-            self,
-            contractType: Literal[
-                Literal["ERC721"], Literal["ERC1155"], Literal["UNDEFINED"]
-            ],
-            description: str,
-            imageUrl: str,
-            name: str,
-            tokenUrl: str,
-            traits: List[Trait] = None,
+        self,
+        contractType: Literal[
+            Literal["ERC721"], Literal["ERC1155"], Literal["UNDEFINED"]
+        ],
+        description: str,
+        imageUrl: str,
+        name: str,
+        tokenUrl: str,
+        traits: List[Trait] = None,
     ):
         self.contractType = contractType
         self.description = description
@@ -1154,15 +1154,15 @@ class NftAttributes:
 
 class NftMetadata:
     def __init__(
-            self,
-            blockchain: Blockchain,
-            collectionName: str,
-            collectionSymbol: str,
-            contractAddress: str,
-            contractType: Literal[
-                Literal["ERC721"], Literal["ERC1155"], Literal["UNDEFINED"]
-            ],
-            tokenId: str,
+        self,
+        blockchain: Blockchain,
+        collectionName: str,
+        collectionSymbol: str,
+        contractAddress: str,
+        contractType: Literal[
+            Literal["ERC721"], Literal["ERC1155"], Literal["UNDEFINED"]
+        ],
+        tokenId: str,
     ):
         self.blockchain = blockchain
         self.collectionName = collectionName
@@ -1174,10 +1174,10 @@ class NftMetadata:
 
 class GetNFTMetadataReply:
     def __init__(
-            self,
-            metadata: NftMetadata = None,
-            attributes: NftAttributes = None,
-            syncStatus: SyncStatus = None,
+        self,
+        metadata: NftMetadata = None,
+        attributes: NftAttributes = None,
+        syncStatus: SyncStatus = None,
     ):
         self.metadata = metadata
         self.attributes = attributes
@@ -1194,12 +1194,12 @@ class GetNFTMetadataReply:
 
 class GetNFTMetadataRequest:
     def __init__(
-            self,
-            blockchain: Blockchain,
-            contractAddress: str,
-            forceFetch: bool,
-            tokenId: str,
-            syncCheck: bool = None,
+        self,
+        blockchain: Blockchain,
+        contractAddress: str,
+        forceFetch: bool,
+        tokenId: str,
+        syncCheck: bool = None,
     ):
         self.blockchain = blockchain
         self.contractAddress = contractAddress
@@ -1230,7 +1230,7 @@ class GetNFTMetadataRequest:
 
 class GetNFTHoldersReply:
     def __init__(
-            self, holders: List[str], nextPageToken: str, syncStatus: SyncStatus = None
+        self, holders: List[str], nextPageToken: str, syncStatus: SyncStatus = None
     ):
         self.holders = holders
         self.nextPageToken = nextPageToken
@@ -1247,12 +1247,12 @@ class GetNFTHoldersReply:
 
 class GetNFTHoldersRequest:
     def __init__(
-            self,
-            blockchain: Blockchain,
-            contractAddress: str,
-            pageToken: str = None,
-            pageSize: float = None,
-            syncCheck: bool = None,
+        self,
+        blockchain: Blockchain,
+        contractAddress: str,
+        pageToken: str = None,
+        pageSize: float = None,
+        syncCheck: bool = None,
     ):
         self.blockchain = blockchain
         self.contractAddress = contractAddress
@@ -1283,21 +1283,21 @@ class GetNFTHoldersRequest:
 
 class NftTransfer:
     def __init__(
-            self,
-            blockHeight: float,
-            blockchain: Blockchain,
-            collectionName: str,
-            collectionSymbol: str,
-            fromAddress: str,
-            imageUrl: str,
-            name: str,
-            timestamp: float,
-            toAddress: str,
-            transactionHash: str,
-            type: Literal[Literal["ERC721"], Literal["ERC1155"], Literal["UNDEFINED"]],
-            value: str,
-            tokenId: str = None,
-            contractAddress: str = None,
+        self,
+        blockHeight: float,
+        blockchain: Blockchain,
+        collectionName: str,
+        collectionSymbol: str,
+        fromAddress: str,
+        imageUrl: str,
+        name: str,
+        timestamp: float,
+        toAddress: str,
+        transactionHash: str,
+        type: Literal[Literal["ERC721"], Literal["ERC1155"], Literal["UNDEFINED"]],
+        value: str,
+        tokenId: str = None,
+        contractAddress: str = None,
     ):
         self.blockHeight = blockHeight
         self.blockchain = blockchain
@@ -1317,10 +1317,10 @@ class NftTransfer:
 
 class GetNftTransfersReply:
     def __init__(
-            self,
-            transfers: List[NftTransfer],
-            nextPageToken: str = None,
-            syncStatus: SyncStatus = None,
+        self,
+        transfers: List[NftTransfer],
+        nextPageToken: str = None,
+        syncStatus: SyncStatus = None,
     ):
         self.transfers = transfers
         self.nextPageToken = nextPageToken
@@ -1337,11 +1337,11 @@ class GetNftTransfersReply:
 
 class GetTokenAllowancesRequest:
     def __init__(
-            self,
-            blockchain: Blockchain | List[Blockchain],
-            walletAddress: str,
-            spenderAddress: str = None,
-            contractAddress: str = None,
+        self,
+        blockchain: Blockchain | List[Blockchain],
+        walletAddress: str,
+        spenderAddress: str = None,
+        contractAddress: str = None,
     ):
         self.blockchain = blockchain
         self.walletAddress = walletAddress
@@ -1370,20 +1370,20 @@ class GetTokenAllowancesRequest:
 
 class ERC20TokenAllowance:
     def __init__(
-            self,
-            blockHeight: float,
-            thumbnail: str,
-            timestamp: float,
-            value: str = None,
-            tokenDecimals: float = None,
-            walletAddress: str = None,
-            contractAddress: str = None,
-            transactionHash: str = None,
-            blockchain: str = None,
-            tokenName: str = None,
-            tokenSymbol: str = None,
-            spenderAddress: str = None,
-            rawLog: Log = None,
+        self,
+        blockHeight: float,
+        thumbnail: str,
+        timestamp: float,
+        value: str = None,
+        tokenDecimals: float = None,
+        walletAddress: str = None,
+        contractAddress: str = None,
+        transactionHash: str = None,
+        blockchain: str = None,
+        tokenName: str = None,
+        tokenSymbol: str = None,
+        spenderAddress: str = None,
+        rawLog: Log = None,
     ):
         self.blockHeight = blockHeight
         self.thumbnail = thumbnail
@@ -1413,18 +1413,18 @@ class GetTokenAllowancesReply:
 
 class GetTokenPriceHistoryRequest:
     def __init__(
-            self,
-            blockchain: Blockchain,
-            contractAddress: str,
-            fromTimestamp: float
-                           | Literal[Literal["latest"]]
-                           | Literal[Literal["earliest"]] = None,
-            toTimestamp: float
-                         | Literal[Literal["latest"]]
-                         | Literal[Literal["earliest"]] = None,
-            interval: float = None,
-            limit: float = None,
-            syncCheck: bool = None,
+        self,
+        blockchain: Blockchain,
+        contractAddress: str,
+        fromTimestamp: float
+        | Literal[Literal["latest"]]
+        | Literal[Literal["earliest"]] = None,
+        toTimestamp: float
+        | Literal[Literal["latest"]]
+        | Literal[Literal["earliest"]] = None,
+        interval: float = None,
+        limit: float = None,
+        syncCheck: bool = None,
     ):
         self.blockchain = blockchain
         self.contractAddress = contractAddress
@@ -1479,10 +1479,10 @@ class GetTokenPriceHistoryReply:
 
 class ExplainTokenPriceRequest:
     def __init__(
-            self,
-            blockHeight: float | Literal[Literal["latest"]] | Literal[Literal["earliest"]],
-            blockchain: Blockchain,
-            tokenAddress: str,
+        self,
+        blockHeight: float | Literal[Literal["latest"]] | Literal[Literal["earliest"]],
+        blockchain: Blockchain,
+        tokenAddress: str,
     ):
         self.blockHeight = blockHeight
         self.blockchain = blockchain
@@ -1515,14 +1515,14 @@ class PriceEstimate:
 
 class ExplainTokenPriceLPDetails:
     def __init__(
-            self,
-            address: str,
-            lastUpdatedBlock: float,
-            price: str,
-            reserve0: str,
-            reserve1: str,
-            token0: str,
-            token1: str,
+        self,
+        address: str,
+        lastUpdatedBlock: float,
+        price: str,
+        reserve0: str,
+        reserve1: str,
+        token0: str,
+        token1: str,
     ):
         self.address = address
         self.lastUpdatedBlock = lastUpdatedBlock
@@ -1543,11 +1543,11 @@ class ExplainTokenPriceTokenDetails:
 
 class ExplainTokenPriceSinglePair:
     def __init__(
-            self,
-            liquidity_pools: List[ExplainTokenPriceLPDetails],
-            priceEstimates: List[PriceEstimate],
-            token0: ExplainTokenPriceTokenDetails,
-            token1: ExplainTokenPriceTokenDetails,
+        self,
+        liquidity_pools: List[ExplainTokenPriceLPDetails],
+        priceEstimates: List[PriceEstimate],
+        token0: ExplainTokenPriceTokenDetails,
+        token1: ExplainTokenPriceTokenDetails,
     ):
         self.liquidity_pools = liquidity_pools
         self.priceEstimates = priceEstimates
@@ -1557,11 +1557,11 @@ class ExplainTokenPriceSinglePair:
 
 class ExplainTokenPriceReply:
     def __init__(
-            self,
-            blockchain: str,
-            pairs: List[ExplainTokenPriceSinglePair],
-            priceEstimates: List[PriceEstimate],
-            tokenAddress: str,
+        self,
+        blockchain: str,
+        pairs: List[ExplainTokenPriceSinglePair],
+        priceEstimates: List[PriceEstimate],
+        tokenAddress: str,
     ):
         self.blockchain = blockchain
         self.pairs = pairs
@@ -1580,11 +1580,11 @@ class ExplainTokenPriceReply:
 
 class GetInternalTransactionsByParentHashRequest:
     def __init__(
-            self,
-            blockchain: Blockchain,
-            onlyWithValue: bool,
-            parentTransactionHash: str,
-            syncCheck: bool = None,
+        self,
+        blockchain: Blockchain,
+        onlyWithValue: bool,
+        parentTransactionHash: str,
+        syncCheck: bool = None,
     ):
         self.blockchain = blockchain
         self.onlyWithValue = onlyWithValue
@@ -1613,11 +1613,11 @@ class GetInternalTransactionsByParentHashRequest:
 
 class GetInternalTransactionsByBlockNumberRequest:
     def __init__(
-            self,
-            blockNumber: float,
-            blockchain: Blockchain,
-            onlyWithValue: bool,
-            syncCheck: bool = None,
+        self,
+        blockNumber: float,
+        blockchain: Blockchain,
+        onlyWithValue: bool,
+        syncCheck: bool = None,
     ):
         self.blockNumber = blockNumber
         self.blockchain = blockchain
@@ -1646,25 +1646,25 @@ class GetInternalTransactionsByBlockNumberRequest:
 
 class InternalTransaction:
     def __init__(
-            self,
-            blockHash: str,
-            blockHeight: float,
-            blockchain: Blockchain,
-            callType: str,
-            fromAddress: str,
-            gas: float,
-            gasUsed: float,
-            input: str,
-            output: str,
-            timestamp: str,
-            toAddress: str,
-            transactionHash: str,
-            transactionIndex: float,
-            value: str,
-            callPath: str = None,
-            callStack: List[float] = None,
-            error: str = None,
-            contractAddress: str = None,
+        self,
+        blockHash: str,
+        blockHeight: float,
+        blockchain: Blockchain,
+        callType: str,
+        fromAddress: str,
+        gas: float,
+        gasUsed: float,
+        input: str,
+        output: str,
+        timestamp: str,
+        toAddress: str,
+        transactionHash: str,
+        transactionIndex: float,
+        value: str,
+        callPath: str = None,
+        callStack: List[float] = None,
+        error: str = None,
+        contractAddress: str = None,
     ):
         self.blockHash = blockHash
         self.blockHeight = blockHeight
@@ -1688,7 +1688,7 @@ class InternalTransaction:
 
 class GetInternalTransactionsReply:
     def __init__(
-            self, internalTransactions: List[InternalTransaction], nextPageToken: str = None
+        self, internalTransactions: List[InternalTransaction], nextPageToken: str = None
     ):
         self.internalTransactions = internalTransactions
         self.nextPageToken = nextPageToken
@@ -1703,17 +1703,17 @@ class GetInternalTransactionsReply:
 
 class GetAccountBalanceHistoricalRequest:
     def __init__(
-            self,
-            walletAddress: str,
-            blockchain: Blockchain | List[Blockchain] = None,
-            onlyWhitelisted: bool = None,
-            nativeFirst: bool = None,
-            pageToken: str = None,
-            pageSize: float = None,
-            blockHeight: float
-                         | Literal[Literal["latest"]]
-                         | Literal[Literal["earliest"]] = None,
-            syncCheck: bool = None,
+        self,
+        walletAddress: str,
+        blockchain: Blockchain | List[Blockchain] = None,
+        onlyWhitelisted: bool = None,
+        nativeFirst: bool = None,
+        pageToken: str = None,
+        pageSize: float = None,
+        blockHeight: float
+        | Literal[Literal["latest"]]
+        | Literal[Literal["earliest"]] = None,
+        syncCheck: bool = None,
     ):
         self.walletAddress = walletAddress
         self.blockchain = blockchain
@@ -1750,15 +1750,15 @@ class GetAccountBalanceHistoricalRequest:
 
 class GetAccountBalanceHistoricalReply:
     def __init__(
-            self,
-            assets: List[Balance],
-            totalBalanceUsd: str,
-            totalCount: float,
-            nextPageToken: str = None,
-            syncStatus: SyncStatus = None,
-            blockHeight: float
-                         | Literal[Literal["latest"]]
-                         | Literal[Literal["earliest"]] = None,
+        self,
+        assets: List[Balance],
+        totalBalanceUsd: str,
+        totalCount: float,
+        nextPageToken: str = None,
+        syncStatus: SyncStatus = None,
+        blockHeight: float
+        | Literal[Literal["latest"]]
+        | Literal[Literal["earliest"]] = None,
     ):
         self.assets = assets
         self.totalBalanceUsd = totalBalanceUsd
