@@ -9,7 +9,12 @@ from web3.eth import Eth
 from web3.middleware import geth_poa_middleware
 from web3.module import Module
 
-from ankr.advanced_apis import AnkrNFTAPI, AnkrQueryAPI, AnkrTokenAPI, AnkrEarlyAccessAPI
+from ankr.advanced_apis import (
+    AnkrNFTAPI,
+    AnkrQueryAPI,
+    AnkrTokenAPI,
+    AnkrEarlyAccessAPI,
+)
 from ankr.providers import (
     ArbitrumHTTPProvider,
     AvalancheHTTPProvider,
