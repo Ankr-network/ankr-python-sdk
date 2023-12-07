@@ -5,7 +5,19 @@ import datetime
 import pytest
 
 from ankr.advanced_apis import AnkrAdvancedAPI
-from ankr.types import *
+from ankr.types import (
+    GetLogsRequest,
+    Blockchain,
+    GetBlocksRequest,
+    GetNFTsByOwnerRequest,
+    GetNFTMetadataRequest,
+    GetNFTHoldersRequest,
+    GetTransactionsByHashRequest,
+    GetTokenHoldersRequest,
+    GetTokenHoldersCountRequest,
+    GetAccountBalanceRequest,
+    GetTokenPriceRequest,
+)
 
 
 def test_client_api_key() -> None:
