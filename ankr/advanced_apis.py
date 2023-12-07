@@ -131,7 +131,7 @@ class AnkrQueryAPI(AnkrMultichainAPI):
         self,
         request: types.GetLogsRequest,
         limit: Optional[int] = None,
-    ) -> Iterable[types.GetLogsReply]:
+    ) -> Iterable[types.Log]:
         for log in self.provider.call_method_paginated(
             rpc="ankr_getLogs",
             request=request,
@@ -419,7 +419,7 @@ class AnkrTokenAPI(AnkrMultichainAPI):
     def get_token_holders_count(
         self,
         request: types.GetTokenHoldersCountRequest,
-    ) -> Iterable[types.DailyHolderCount]:
+    ) -> types.DailyHolderCount:
         request.pageSize = 1
         reply = self.provider.call_method(
             rpc="ankr_getTokenHoldersCount",
@@ -509,13 +509,13 @@ class AnkrNFTAPI(AnkrMultichainAPI):
 
     def get_nft_metadata(
         self, request: types.GetNFTMetadataRequest
-    ) -> [types.NftMetadata, types.NftAttributes]:
+    ) -> types.GetNFTMetadataReply:
         reply = self.provider.call_method(
             rpc="ankr_getNFTMetadata",
             request=request,
             reply=types.GetNFTMetadataReply,
         )
-        return reply.metadata, reply.attributes
+        return reply
 
     def get_nft_metadata_raw(
         self, request: types.GetNFTMetadataRequest

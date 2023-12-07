@@ -9,6 +9,14 @@ class SyncStatus:
         self.status = status
         self.timestamp = timestamp
 
+    @classmethod
+    def from_dict(cls, **data):
+        return cls(
+            lag=data.get("lag"),
+            status=data.get("status"),
+            timestamp=data.get("timestamp"),
+        )
+
 
 class MethodInput:
     def __init__(self, name: str, size: float, type: str, valueDecoded: str):
@@ -16,6 +24,15 @@ class MethodInput:
         self.size = size
         self.type = type
         self.valueDecoded = valueDecoded
+
+    @classmethod
+    def from_dict(cls, **data):
+        return cls(
+            name=data.get("name"),
+            size=data.get("size"),
+            type=data.get("type"),
+            valueDecoded=data.get("valueDecoded"),
+        )
 
 
 class Method:
@@ -35,6 +52,20 @@ class Method:
         self.string = string
         self.verified = verified
 
+    @classmethod
+    def from_dict(cls, **data):
+        return cls(
+            id=data.get("id"),
+            inputs=[
+                MethodInput.from_dict(**methodinput_data)
+                for methodinput_data in data.get("inputs", [])
+            ],
+            name=data.get("name"),
+            signature=data.get("signature"),
+            string=data.get("string"),
+            verified=data.get("verified"),
+        )
+
 
 class EventInput:
     def __init__(
@@ -45,6 +76,16 @@ class EventInput:
         self.size = size
         self.type = type
         self.valueDecoded = valueDecoded
+
+    @classmethod
+    def from_dict(cls, **data):
+        return cls(
+            indexed=data.get("indexed"),
+            name=data.get("name"),
+            size=data.get("size"),
+            type=data.get("type"),
+            valueDecoded=data.get("valueDecoded"),
+        )
 
 
 class Event:
@@ -65,6 +106,21 @@ class Event:
         self.signature = signature
         self.string = string
         self.verified = verified
+
+    @classmethod
+    def from_dict(cls, **data):
+        return cls(
+            anonymous=data.get("anonymous"),
+            id=data.get("id"),
+            inputs=[
+                EventInput.from_dict(**eventinput_data)
+                for eventinput_data in data.get("inputs", [])
+            ],
+            name=data.get("name"),
+            signature=data.get("signature"),
+            string=data.get("string"),
+            verified=data.get("verified"),
+        )
 
 
 class Log:
@@ -93,6 +149,24 @@ class Log:
         self.transactionHash = transactionHash
         self.transactionIndex = transactionIndex
         self.event = event
+
+    @classmethod
+    def from_dict(cls, **data):
+        return cls(
+            address=data.get("address"),
+            blockHash=data.get("blockHash"),
+            blockNumber=data.get("blockNumber"),
+            blockchain=Blockchain(data.get("blockchain")),
+            data=data.get("data"),
+            logIndex=data.get("logIndex"),
+            removed=data.get("removed"),
+            topics=data.get("topics"),
+            transactionHash=data.get("transactionHash"),
+            transactionIndex=data.get("transactionIndex"),
+            event=Event.from_dict(**data.get("event"))
+            if data.get("event") is not None
+            else None,
+        )
 
 
 class Transaction:
@@ -146,6 +220,36 @@ class Transaction:
         self.timestamp = timestamp
         self.type = type
 
+    @classmethod
+    def from_dict(cls, **data):
+        return cls(
+            blockHash=data.get("blockHash"),
+            blockNumber=data.get("blockNumber"),
+            from_=data.get("from"),
+            transactionIndex=data.get("transactionIndex"),
+            value=data.get("value"),
+            gasPrice=data.get("gasPrice"),
+            gas=data.get("gas"),
+            contractAddress=data.get("contractAddress"),
+            cumulativeGasUsed=data.get("cumulativeGasUsed"),
+            input=data.get("input"),
+            v=data.get("v"),
+            r=data.get("r"),
+            s=data.get("s"),
+            method=Method.from_dict(**data.get("method"))
+            if data.get("method") is not None
+            else None,
+            to=data.get("to"),
+            nonce=data.get("nonce"),
+            gasUsed=data.get("gasUsed"),
+            logs=[Log.from_dict(**log_data) for log_data in data.get("logs", [])],
+            hash=data.get("hash"),
+            status=data.get("status"),
+            blockchain=data.get("blockchain"),
+            timestamp=data.get("timestamp"),
+            type=data.get("type"),
+        )
+
 
 class Block:
     def __init__(
@@ -194,6 +298,35 @@ class Block:
         self.uncles = uncles
         self.blockchain = blockchain
 
+    @classmethod
+    def from_dict(cls, **data):
+        return cls(
+            difficulty=data.get("difficulty"),
+            extraData=data.get("extraData"),
+            gasLimit=data.get("gasLimit"),
+            gasUsed=data.get("gasUsed"),
+            hash=data.get("hash"),
+            logsBloom=data.get("logsBloom"),
+            miner=data.get("miner"),
+            mixHash=data.get("mixHash"),
+            nonce=data.get("nonce"),
+            number=data.get("number"),
+            parentHash=data.get("parentHash"),
+            receiptsRoot=data.get("receiptsRoot"),
+            sha3Uncles=data.get("sha3Uncles"),
+            size=data.get("size"),
+            stateRoot=data.get("stateRoot"),
+            timestamp=data.get("timestamp"),
+            totalDifficulty=data.get("totalDifficulty"),
+            transactions=[
+                Transaction.from_dict(**transaction_data)
+                for transaction_data in data.get("transactions", [])
+            ],
+            transactionsRoot=data.get("transactionsRoot"),
+            uncles=data.get("uncles"),
+            blockchain=data.get("blockchain"),
+        )
+
 
 class GetBlocksReply:
     def __init__(self, blocks: List[Block], syncStatus: SyncStatus = None):
@@ -203,8 +336,12 @@ class GetBlocksReply:
     @classmethod
     def from_dict(cls, **data):
         return cls(
-            blocks=data.get("blocks"),
-            syncStatus=data.get("syncStatus"),
+            blocks=[
+                Block.from_dict(**block_data) for block_data in data.get("blocks", [])
+            ],
+            syncStatus=SyncStatus.from_dict(**data.get("syncStatus"))
+            if data.get("syncStatus") is not None
+            else None,
         )
 
 
@@ -268,8 +405,13 @@ class GetTransactionsByHashReply:
     @classmethod
     def from_dict(cls, **data):
         return cls(
-            transactions=data.get("transactions"),
-            syncStatus=data.get("syncStatus"),
+            transactions=[
+                Transaction.from_dict(**transaction_data)
+                for transaction_data in data.get("transactions", [])
+            ],
+            syncStatus=SyncStatus.from_dict(**data.get("syncStatus"))
+            if data.get("syncStatus") is not None
+            else None,
         )
 
 
@@ -327,8 +469,13 @@ class GetTransactionsByAddressReply:
     def from_dict(cls, **data):
         return cls(
             nextPageToken=data.get("nextPageToken"),
-            transactions=data.get("transactions"),
-            syncStatus=data.get("syncStatus"),
+            transactions=[
+                Transaction.from_dict(**transaction_data)
+                for transaction_data in data.get("transactions", [])
+            ],
+            syncStatus=SyncStatus.from_dict(**data.get("syncStatus"))
+            if data.get("syncStatus") is not None
+            else None,
         )
 
 
@@ -405,9 +552,11 @@ class GetLogsReply:
     @classmethod
     def from_dict(cls, **data):
         return cls(
-            logs=data.get("logs"),
+            logs=[Log.from_dict(**log_data) for log_data in data.get("logs", [])],
             nextPageToken=data.get("nextPageToken"),
-            syncStatus=data.get("syncStatus"),
+            syncStatus=SyncStatus.from_dict(**data.get("syncStatus"))
+            if data.get("syncStatus") is not None
+            else None,
         )
 
 
@@ -493,6 +642,17 @@ class BlockchainStats:
         self.totalEventsCount = totalEventsCount
         self.totalTransactionsCount = totalTransactionsCount
 
+    @classmethod
+    def from_dict(cls, **data):
+        return cls(
+            blockTimeMs=data.get("blockTimeMs"),
+            blockchain=data.get("blockchain"),
+            latestBlockNumber=data.get("latestBlockNumber"),
+            nativeCoinUsdPrice=data.get("nativeCoinUsdPrice"),
+            totalEventsCount=data.get("totalEventsCount"),
+            totalTransactionsCount=data.get("totalTransactionsCount"),
+        )
+
 
 class GetBlockchainStatsReply:
     def __init__(self, stats: List[BlockchainStats], syncStatus: SyncStatus = None):
@@ -502,8 +662,13 @@ class GetBlockchainStatsReply:
     @classmethod
     def from_dict(cls, **data):
         return cls(
-            stats=data.get("stats"),
-            syncStatus=data.get("syncStatus"),
+            stats=[
+                BlockchainStats.from_dict(**blockchainstats_data)
+                for blockchainstats_data in data.get("stats", [])
+            ],
+            syncStatus=SyncStatus.from_dict(**data.get("syncStatus"))
+            if data.get("syncStatus") is not None
+            else None,
         )
 
 
@@ -541,7 +706,9 @@ class GetInteractionsReply:
     def from_dict(cls, **data):
         return cls(
             blockchains=data.get("blockchains"),
-            syncStatus=data.get("syncStatus"),
+            syncStatus=SyncStatus.from_dict(**data.get("syncStatus"))
+            if data.get("syncStatus") is not None
+            else None,
         )
 
 
@@ -586,6 +753,23 @@ class Balance:
         self.tokenType = tokenType
         self.contractAddress = contractAddress
 
+    @classmethod
+    def from_dict(cls, **data):
+        return cls(
+            balance=data.get("balance"),
+            balanceRawInteger=data.get("balanceRawInteger"),
+            balanceUsd=data.get("balanceUsd"),
+            blockchain=Blockchain(data.get("blockchain")),
+            holderAddress=data.get("holderAddress"),
+            thumbnail=data.get("thumbnail"),
+            tokenDecimals=data.get("tokenDecimals"),
+            tokenName=data.get("tokenName"),
+            tokenPrice=data.get("tokenPrice"),
+            tokenSymbol=data.get("tokenSymbol"),
+            tokenType=data.get("tokenType"),
+            contractAddress=data.get("contractAddress"),
+        )
+
 
 class GetAccountBalanceReply:
     def __init__(
@@ -605,11 +789,16 @@ class GetAccountBalanceReply:
     @classmethod
     def from_dict(cls, **data):
         return cls(
-            assets=data.get("assets"),
+            assets=[
+                Balance.from_dict(**balance_data)
+                for balance_data in data.get("assets", [])
+            ],
             totalBalanceUsd=data.get("totalBalanceUsd"),
             totalCount=data.get("totalCount"),
             nextPageToken=data.get("nextPageToken"),
-            syncStatus=data.get("syncStatus"),
+            syncStatus=SyncStatus.from_dict(**data.get("syncStatus"))
+            if data.get("syncStatus") is not None
+            else None,
         )
 
 
@@ -671,10 +860,12 @@ class GetTokenPriceReply:
     @classmethod
     def from_dict(cls, **data):
         return cls(
-            blockchain=data.get("blockchain"),
+            blockchain=Blockchain(data.get("blockchain")),
             usdPrice=data.get("usdPrice"),
             contractAddress=data.get("contractAddress"),
-            syncStatus=data.get("syncStatus"),
+            syncStatus=SyncStatus.from_dict(**data.get("syncStatus"))
+            if data.get("syncStatus") is not None
+            else None,
         )
 
 
@@ -714,6 +905,14 @@ class HolderBalance:
         self.balanceRawInteger = balanceRawInteger
         self.holderAddress = holderAddress
 
+    @classmethod
+    def from_dict(cls, **data):
+        return cls(
+            balance=data.get("balance"),
+            balanceRawInteger=data.get("balanceRawInteger"),
+            holderAddress=data.get("holderAddress"),
+        )
+
 
 class GetTokenHoldersReply:
     def __init__(
@@ -737,13 +936,18 @@ class GetTokenHoldersReply:
     @classmethod
     def from_dict(cls, **data):
         return cls(
-            blockchain=data.get("blockchain"),
+            blockchain=Blockchain(data.get("blockchain")),
             contractAddress=data.get("contractAddress"),
-            holders=data.get("holders"),
+            holders=[
+                HolderBalance.from_dict(**holderbalance_data)
+                for holderbalance_data in data.get("holders", [])
+            ],
             holdersCount=data.get("holdersCount"),
             nextPageToken=data.get("nextPageToken"),
             tokenDecimals=data.get("tokenDecimals"),
-            syncStatus=data.get("syncStatus"),
+            syncStatus=SyncStatus.from_dict(**data.get("syncStatus"))
+            if data.get("syncStatus") is not None
+            else None,
         )
 
 
@@ -796,6 +1000,15 @@ class DailyHolderCount:
         self.totalAmount = totalAmount
         self.totalAmountRawInteger = totalAmountRawInteger
 
+    @classmethod
+    def from_dict(cls, **data):
+        return cls(
+            holderCount=data.get("holderCount"),
+            lastUpdatedAt=data.get("lastUpdatedAt"),
+            totalAmount=data.get("totalAmount"),
+            totalAmountRawInteger=data.get("totalAmountRawInteger"),
+        )
+
 
 class GetTokenHoldersCountReply:
     def __init__(
@@ -819,13 +1032,18 @@ class GetTokenHoldersCountReply:
     @classmethod
     def from_dict(cls, **data):
         return cls(
-            blockchain=data.get("blockchain"),
+            blockchain=Blockchain(data.get("blockchain")),
             contractAddress=data.get("contractAddress"),
-            holderCountHistory=data.get("holderCountHistory"),
+            holderCountHistory=[
+                DailyHolderCount.from_dict(**dailyholdercount_data)
+                for dailyholdercount_data in data.get("holderCountHistory", [])
+            ],
             latestHoldersCount=data.get("latestHoldersCount"),
             nextPageToken=data.get("nextPageToken"),
             tokenDecimals=data.get("tokenDecimals"),
-            syncStatus=data.get("syncStatus"),
+            syncStatus=SyncStatus.from_dict(**data.get("syncStatus"))
+            if data.get("syncStatus") is not None
+            else None,
         )
 
 
@@ -882,6 +1100,17 @@ class CurrencyDetailsExtended:
         self.thumbnail = thumbnail
         self.address = address
 
+    @classmethod
+    def from_dict(cls, **data):
+        return cls(
+            blockchain=Blockchain(data.get("blockchain")),
+            decimals=data.get("decimals"),
+            name=data.get("name"),
+            symbol=data.get("symbol"),
+            thumbnail=data.get("thumbnail"),
+            address=data.get("address"),
+        )
+
 
 class GetCurrenciesReply:
     def __init__(
@@ -893,8 +1122,13 @@ class GetCurrenciesReply:
     @classmethod
     def from_dict(cls, **data):
         return cls(
-            currencies=data.get("currencies"),
-            syncStatus=data.get("syncStatus"),
+            currencies=[
+                CurrencyDetailsExtended.from_dict(**currencydetailsextended_data)
+                for currencydetailsextended_data in data.get("currencies", [])
+            ],
+            syncStatus=SyncStatus.from_dict(**data.get("syncStatus"))
+            if data.get("syncStatus") is not None
+            else None,
         )
 
 
@@ -954,6 +1188,25 @@ class TokenTransfer:
         self.toAddress = toAddress
         self.direction = direction
 
+    @classmethod
+    def from_dict(cls, **data):
+        return cls(
+            blockHeight=data.get("blockHeight"),
+            blockchain=data.get("blockchain"),
+            thumbnail=data.get("thumbnail"),
+            timestamp=data.get("timestamp"),
+            tokenDecimals=data.get("tokenDecimals"),
+            tokenName=data.get("tokenName"),
+            tokenSymbol=data.get("tokenSymbol"),
+            transactionHash=data.get("transactionHash"),
+            value=data.get("value"),
+            valueRawInteger=data.get("valueRawInteger"),
+            fromAddress=data.get("fromAddress"),
+            contractAddress=data.get("contractAddress"),
+            toAddress=data.get("toAddress"),
+            direction=data.get("direction"),
+        )
+
 
 class GetTokenTransfersReply:
     def __init__(
@@ -969,9 +1222,14 @@ class GetTokenTransfersReply:
     @classmethod
     def from_dict(cls, **data):
         return cls(
-            transfers=data.get("transfers"),
+            transfers=[
+                TokenTransfer.from_dict(**tokentransfer_data)
+                for tokentransfer_data in data.get("transfers", [])
+            ],
             nextPageToken=data.get("nextPageToken"),
-            syncStatus=data.get("syncStatus"),
+            syncStatus=SyncStatus.from_dict(**data.get("syncStatus"))
+            if data.get("syncStatus") is not None
+            else None,
         )
 
 
@@ -1039,6 +1297,13 @@ class Trait:
         self.trait_type = trait_type
         self.value = value
 
+    @classmethod
+    def from_dict(cls, **data):
+        return cls(
+            trait_type=data.get("trait_type"),
+            value=data.get("value"),
+        )
+
 
 class Nft:
     def __init__(
@@ -1069,6 +1334,24 @@ class Nft:
         self.quantity = quantity
         self.traits = traits
 
+    @classmethod
+    def from_dict(cls, **data):
+        return cls(
+            blockchain=Blockchain(data.get("blockchain")),
+            collectionName=data.get("collectionName"),
+            contractAddress=data.get("contractAddress"),
+            contractType=data.get("contractType"),
+            imageUrl=data.get("imageUrl"),
+            name=data.get("name"),
+            symbol=data.get("symbol"),
+            tokenId=data.get("tokenId"),
+            tokenUrl=data.get("tokenUrl"),
+            quantity=data.get("quantity"),
+            traits=[
+                Trait.from_dict(**trait_data) for trait_data in data.get("traits", [])
+            ],
+        )
+
 
 class GetNFTsByOwnerReply:
     def __init__(
@@ -1086,10 +1369,12 @@ class GetNFTsByOwnerReply:
     @classmethod
     def from_dict(cls, **data):
         return cls(
-            assets=data.get("assets"),
+            assets=[Nft.from_dict(**nft_data) for nft_data in data.get("assets", [])],
             nextPageToken=data.get("nextPageToken"),
             owner=data.get("owner"),
-            syncStatus=data.get("syncStatus"),
+            syncStatus=SyncStatus.from_dict(**data.get("syncStatus"))
+            if data.get("syncStatus") is not None
+            else None,
         )
 
 
@@ -1151,6 +1436,19 @@ class NftAttributes:
         self.tokenUrl = tokenUrl
         self.traits = traits
 
+    @classmethod
+    def from_dict(cls, **data):
+        return cls(
+            contractType=data.get("contractType"),
+            description=data.get("description"),
+            imageUrl=data.get("imageUrl"),
+            name=data.get("name"),
+            tokenUrl=data.get("tokenUrl"),
+            traits=[
+                Trait.from_dict(**trait_data) for trait_data in data.get("traits", [])
+            ],
+        )
+
 
 class NftMetadata:
     def __init__(
@@ -1171,6 +1469,17 @@ class NftMetadata:
         self.contractType = contractType
         self.tokenId = tokenId
 
+    @classmethod
+    def from_dict(cls, **data):
+        return cls(
+            blockchain=Blockchain(data.get("blockchain")),
+            collectionName=data.get("collectionName"),
+            collectionSymbol=data.get("collectionSymbol"),
+            contractAddress=data.get("contractAddress"),
+            contractType=data.get("contractType"),
+            tokenId=data.get("tokenId"),
+        )
+
 
 class GetNFTMetadataReply:
     def __init__(
@@ -1186,9 +1495,15 @@ class GetNFTMetadataReply:
     @classmethod
     def from_dict(cls, **data):
         return cls(
-            metadata=data.get("metadata"),
-            attributes=data.get("attributes"),
-            syncStatus=data.get("syncStatus"),
+            metadata=NftMetadata.from_dict(**data.get("metadata"))
+            if data.get("metadata") is not None
+            else None,
+            attributes=NftAttributes.from_dict(**data.get("attributes"))
+            if data.get("attributes") is not None
+            else None,
+            syncStatus=SyncStatus.from_dict(**data.get("syncStatus"))
+            if data.get("syncStatus") is not None
+            else None,
         )
 
 
@@ -1241,7 +1556,9 @@ class GetNFTHoldersReply:
         return cls(
             holders=data.get("holders"),
             nextPageToken=data.get("nextPageToken"),
-            syncStatus=data.get("syncStatus"),
+            syncStatus=SyncStatus.from_dict(**data.get("syncStatus"))
+            if data.get("syncStatus") is not None
+            else None,
         )
 
 
@@ -1314,6 +1631,25 @@ class NftTransfer:
         self.tokenId = tokenId
         self.contractAddress = contractAddress
 
+    @classmethod
+    def from_dict(cls, **data):
+        return cls(
+            blockHeight=data.get("blockHeight"),
+            blockchain=Blockchain(data.get("blockchain")),
+            collectionName=data.get("collectionName"),
+            collectionSymbol=data.get("collectionSymbol"),
+            fromAddress=data.get("fromAddress"),
+            imageUrl=data.get("imageUrl"),
+            name=data.get("name"),
+            timestamp=data.get("timestamp"),
+            toAddress=data.get("toAddress"),
+            transactionHash=data.get("transactionHash"),
+            type=data.get("type"),
+            value=data.get("value"),
+            tokenId=data.get("tokenId"),
+            contractAddress=data.get("contractAddress"),
+        )
+
 
 class GetNftTransfersReply:
     def __init__(
@@ -1329,9 +1665,14 @@ class GetNftTransfersReply:
     @classmethod
     def from_dict(cls, **data):
         return cls(
-            transfers=data.get("transfers"),
+            transfers=[
+                NftTransfer.from_dict(**nfttransfer_data)
+                for nfttransfer_data in data.get("transfers", [])
+            ],
             nextPageToken=data.get("nextPageToken"),
-            syncStatus=data.get("syncStatus"),
+            syncStatus=SyncStatus.from_dict(**data.get("syncStatus"))
+            if data.get("syncStatus") is not None
+            else None,
         )
 
 
@@ -1399,6 +1740,26 @@ class ERC20TokenAllowance:
         self.spenderAddress = spenderAddress
         self.rawLog = rawLog
 
+    @classmethod
+    def from_dict(cls, **data):
+        return cls(
+            blockHeight=data.get("blockHeight"),
+            thumbnail=data.get("thumbnail"),
+            timestamp=data.get("timestamp"),
+            value=data.get("value"),
+            tokenDecimals=data.get("tokenDecimals"),
+            walletAddress=data.get("walletAddress"),
+            contractAddress=data.get("contractAddress"),
+            transactionHash=data.get("transactionHash"),
+            blockchain=data.get("blockchain"),
+            tokenName=data.get("tokenName"),
+            tokenSymbol=data.get("tokenSymbol"),
+            spenderAddress=data.get("spenderAddress"),
+            rawLog=Log.from_dict(**data.get("rawLog"))
+            if data.get("rawLog") is not None
+            else None,
+        )
+
 
 class GetTokenAllowancesReply:
     def __init__(self, allowances: List[ERC20TokenAllowance]):
@@ -1407,7 +1768,10 @@ class GetTokenAllowancesReply:
     @classmethod
     def from_dict(cls, **data):
         return cls(
-            allowances=data.get("allowances"),
+            allowances=[
+                ERC20TokenAllowance.from_dict(**erc20tokenallowance_data)
+                for erc20tokenallowance_data in data.get("allowances", [])
+            ],
         )
 
 
@@ -1463,6 +1827,14 @@ class Quote:
         self.timestamp = timestamp
         self.usdPrice = usdPrice
 
+    @classmethod
+    def from_dict(cls, **data):
+        return cls(
+            blockHeight=data.get("blockHeight"),
+            timestamp=data.get("timestamp"),
+            usdPrice=data.get("usdPrice"),
+        )
+
 
 class GetTokenPriceHistoryReply:
     def __init__(self, quotes: List[Quote], syncStatus: SyncStatus = None):
@@ -1472,8 +1844,12 @@ class GetTokenPriceHistoryReply:
     @classmethod
     def from_dict(cls, **data):
         return cls(
-            quotes=data.get("quotes"),
-            syncStatus=data.get("syncStatus"),
+            quotes=[
+                Quote.from_dict(**quote_data) for quote_data in data.get("quotes", [])
+            ],
+            syncStatus=SyncStatus.from_dict(**data.get("syncStatus"))
+            if data.get("syncStatus") is not None
+            else None,
         )
 
 
@@ -1512,6 +1888,13 @@ class PriceEstimate:
         self.price = price
         self.strategy = strategy
 
+    @classmethod
+    def from_dict(cls, **data):
+        return cls(
+            price=data.get("price"),
+            strategy=data.get("strategy"),
+        )
+
 
 class ExplainTokenPriceLPDetails:
     def __init__(
@@ -1532,6 +1915,18 @@ class ExplainTokenPriceLPDetails:
         self.token0 = token0
         self.token1 = token1
 
+    @classmethod
+    def from_dict(cls, **data):
+        return cls(
+            address=data.get("address"),
+            lastUpdatedBlock=data.get("lastUpdatedBlock"),
+            price=data.get("price"),
+            reserve0=data.get("reserve0"),
+            reserve1=data.get("reserve1"),
+            token0=data.get("token0"),
+            token1=data.get("token1"),
+        )
+
 
 class ExplainTokenPriceTokenDetails:
     def __init__(self, contractAddress: str, decimals: float, name: str, symbol: str):
@@ -1539,6 +1934,15 @@ class ExplainTokenPriceTokenDetails:
         self.decimals = decimals
         self.name = name
         self.symbol = symbol
+
+    @classmethod
+    def from_dict(cls, **data):
+        return cls(
+            contractAddress=data.get("contractAddress"),
+            decimals=data.get("decimals"),
+            name=data.get("name"),
+            symbol=data.get("symbol"),
+        )
 
 
 class ExplainTokenPriceSinglePair:
@@ -1553,6 +1957,25 @@ class ExplainTokenPriceSinglePair:
         self.priceEstimates = priceEstimates
         self.token0 = token0
         self.token1 = token1
+
+    @classmethod
+    def from_dict(cls, **data):
+        return cls(
+            liquidity_pools=[
+                ExplainTokenPriceLPDetails.from_dict(**explaintokenpricelpdetails_data)
+                for explaintokenpricelpdetails_data in data.get("liquidity_pools", [])
+            ],
+            priceEstimates=[
+                PriceEstimate.from_dict(**priceestimate_data)
+                for priceestimate_data in data.get("priceEstimates", [])
+            ],
+            token0=ExplainTokenPriceTokenDetails.from_dict(**data.get("token0"))
+            if data.get("token0") is not None
+            else None,
+            token1=ExplainTokenPriceTokenDetails.from_dict(**data.get("token1"))
+            if data.get("token1") is not None
+            else None,
+        )
 
 
 class ExplainTokenPriceReply:
@@ -1572,8 +1995,16 @@ class ExplainTokenPriceReply:
     def from_dict(cls, **data):
         return cls(
             blockchain=data.get("blockchain"),
-            pairs=data.get("pairs"),
-            priceEstimates=data.get("priceEstimates"),
+            pairs=[
+                ExplainTokenPriceSinglePair.from_dict(
+                    **explaintokenpricesinglepair_data
+                )
+                for explaintokenpricesinglepair_data in data.get("pairs", [])
+            ],
+            priceEstimates=[
+                PriceEstimate.from_dict(**priceestimate_data)
+                for priceestimate_data in data.get("priceEstimates", [])
+            ],
             tokenAddress=data.get("tokenAddress"),
         )
 
@@ -1685,6 +2116,29 @@ class InternalTransaction:
         self.error = error
         self.contractAddress = contractAddress
 
+    @classmethod
+    def from_dict(cls, **data):
+        return cls(
+            blockHash=data.get("blockHash"),
+            blockHeight=data.get("blockHeight"),
+            blockchain=Blockchain(data.get("blockchain")),
+            callType=data.get("callType"),
+            fromAddress=data.get("fromAddress"),
+            gas=data.get("gas"),
+            gasUsed=data.get("gasUsed"),
+            input=data.get("input"),
+            output=data.get("output"),
+            timestamp=data.get("timestamp"),
+            toAddress=data.get("toAddress"),
+            transactionHash=data.get("transactionHash"),
+            transactionIndex=data.get("transactionIndex"),
+            value=data.get("value"),
+            callPath=data.get("callPath"),
+            callStack=data.get("callStack"),
+            error=data.get("error"),
+            contractAddress=data.get("contractAddress"),
+        )
+
 
 class GetInternalTransactionsReply:
     def __init__(
@@ -1696,7 +2150,10 @@ class GetInternalTransactionsReply:
     @classmethod
     def from_dict(cls, **data):
         return cls(
-            internalTransactions=data.get("internalTransactions"),
+            internalTransactions=[
+                InternalTransaction.from_dict(**internaltransaction_data)
+                for internaltransaction_data in data.get("internalTransactions", [])
+            ],
             nextPageToken=data.get("nextPageToken"),
         )
 
@@ -1770,11 +2227,16 @@ class GetAccountBalanceHistoricalReply:
     @classmethod
     def from_dict(cls, **data):
         return cls(
-            assets=data.get("assets"),
+            assets=[
+                Balance.from_dict(**balance_data)
+                for balance_data in data.get("assets", [])
+            ],
             totalBalanceUsd=data.get("totalBalanceUsd"),
             totalCount=data.get("totalCount"),
             nextPageToken=data.get("nextPageToken"),
-            syncStatus=data.get("syncStatus"),
+            syncStatus=SyncStatus.from_dict(**data.get("syncStatus"))
+            if data.get("syncStatus") is not None
+            else None,
             blockHeight=data.get("blockHeight"),
         )
 

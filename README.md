@@ -466,7 +466,7 @@ from ankr.types import Blockchain, GetNFTMetadataRequest
 
 ankr_w3 = AnkrWeb3("YOUR-TOKEN")
 
-metadata, attributes = AnkrAdvancedAPI.get_nft_metadata(
+reply = AnkrAdvancedAPI.get_nft_metadata(
     request=GetNFTMetadataRequest(
         blockchain=Blockchain.Eth,
         contractAddress='0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d',
@@ -475,8 +475,8 @@ metadata, attributes = AnkrAdvancedAPI.get_nft_metadata(
     )
 )
 
-print(metadata)
-print(attributes)
+print(reply.metadata)
+print(reply.attributes)
 ```
 
 #### `get_nft_holders` / `get_nft_holders_raw`
