@@ -183,12 +183,12 @@ Note: some methods are available in *_raw format, allowing to get full reply wit
 Get a list of history of the price for given contract to given timestamp.
 
 ```python3
-from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr import AnkrAdvancedAPI
 from ankr.types import Blockchain, GetTokenPriceHistoryRequest
 
-ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+advancedAPI = AnkrAdvancedAPI("YOUR-TOKEN")
 
-result = AnkrAdvancedAPI.get_token_price_history(
+result = advancedAPI.get_token_price_history(
     request=GetTokenPriceHistoryRequest(
         blockchain=Blockchain.Eth,
         contractAddress='0x50327c6c5a14dcade707abad2e27eb517df87ab5',
@@ -205,12 +205,12 @@ print(result)
 Get the coin and token balances of the wallet at specified block.
 
 ```python3
-from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr import AnkrAdvancedAPI
 from ankr.types import Blockchain, GetAccountBalanceHistoricalRequest
 
-ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+advancedAPI = AnkrAdvancedAPI("YOUR-TOKEN")
 
-result = AnkrAdvancedAPI.get_account_balance_historical(
+result = advancedAPI.get_account_balance_historical(
     request=GetAccountBalanceHistoricalRequest(
         blockchain=Blockchain.Eth,
         walletAddress='vitalik.eth',
@@ -226,12 +226,12 @@ print(result)
 Get a list of internal transactions in the block.
 
 ```python3
-from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr import AnkrAdvancedAPI
 from ankr.types import Blockchain, GetInternalTransactionsByBlockNumberRequest
 
-ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+advancedAPI = AnkrAdvancedAPI("YOUR-TOKEN")
 
-result = AnkrAdvancedAPI.get_internal_transactions_by_block_number(
+result = advancedAPI.get_internal_transactions_by_block_number(
     request=GetInternalTransactionsByBlockNumberRequest(
         blockchain=Blockchain.Eth,
         blockNumber=10000000,
@@ -247,12 +247,12 @@ for transaction in result:
 Get a list of internal transactions in the transaction.
 
 ```python3
-from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr import AnkrAdvancedAPI
 from ankr.types import Blockchain, GetInternalTransactionsByParentHashRequest
 
-ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+advancedAPI = AnkrAdvancedAPI("YOUR-TOKEN")
 
-result = AnkrAdvancedAPI.get_internal_transactions_by_parent_hash(
+result = advancedAPI.get_internal_transactions_by_parent_hash(
     request=GetInternalTransactionsByParentHashRequest(
         blockchain=Blockchain.Eth,
         parentTransactionHash='0xa50f8744e65cb76f66f9d54499d5401866a75d93db2e784952f55205afc3acc5',
@@ -270,12 +270,12 @@ for transaction in result:
 Get a list of tokens and pool how price for calculated.
 
 ```python3
-from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr import AnkrAdvancedAPI
 from ankr.types import Blockchain, ExplainTokenPriceRequest
 
-ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+advancedAPI = AnkrAdvancedAPI("YOUR-TOKEN")
 
-pairs, estimates = AnkrAdvancedAPI.explain_token_price(
+pairs, estimates = advancedAPI.explain_token_price(
     request=ExplainTokenPriceRequest(
         blockchain=Blockchain.Eth,
         tokenAddress='0x8290333cef9e6d528dd5618fb97a76f268f3edd4',
@@ -292,12 +292,12 @@ print(estimates)
 Get the coin and token balances of a wallet.
 
 ```python3
-from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr import AnkrAdvancedAPI
 from ankr.types import GetAccountBalanceRequest
 
-ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+advancedAPI = AnkrAdvancedAPI("YOUR-TOKEN")
 
-result = AnkrAdvancedAPI.get_account_balance(
+result = advancedAPI.get_account_balance(
     request=GetAccountBalanceRequest(
         walletAddress="0x77A859A53D4de24bBC0CC80dD93Fbe391Df45527"
     )
@@ -312,12 +312,12 @@ for balance in result:
 Get a list of supported currencies for a given blockchain.
 
 ```python3
-from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr import AnkrAdvancedAPI
 from ankr.types import Blockchain, GetCurrenciesRequest
 
-ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+advancedAPI = AnkrAdvancedAPI("YOUR-TOKEN")
 
-result = AnkrAdvancedAPI.get_currencies(
+result = advancedAPI.get_currencies(
     request=GetCurrenciesRequest(
         blockchain=Blockchain.Fantom,
     )
@@ -332,12 +332,12 @@ for currency in result:
 Get the list of token holders for a given contract address.
 
 ```python3
-from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr import AnkrAdvancedAPI
 from ankr.types import Blockchain, GetTokenHoldersRequest
 
-ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+advancedAPI = AnkrAdvancedAPI("YOUR-TOKEN")
 
-result = AnkrAdvancedAPI.get_token_holders(
+result = advancedAPI.get_token_holders(
     request=GetTokenHoldersRequest(
         blockchain=Blockchain.Eth,
         contractAddress='0xdac17f958d2ee523a2206206994597c13d831ec7',
@@ -353,12 +353,12 @@ for balance in result:
 Get historical data about the number of token holders for a given contract address.
 
 ```python3
-from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr import AnkrAdvancedAPI
 from ankr.types import Blockchain, GetTokenHoldersCountRequest
 
-ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+advancedAPI = AnkrAdvancedAPI("YOUR-TOKEN")
 
-result = AnkrAdvancedAPI.get_token_holders_count_history_raw(
+result = advancedAPI.get_token_holders_count_history(
     request=GetTokenHoldersCountRequest(
         blockchain=Blockchain.Eth,
         contractAddress='0xdAC17F958D2ee523a2206206994597C13D831ec7',
@@ -374,12 +374,12 @@ for balance in result:
 Get current data about the number of token holders for a given contract address.
 
 ```python3
-from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr import AnkrAdvancedAPI
 from ankr.types import Blockchain, GetTokenHoldersCountRequest
 
-ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+advancedAPI = AnkrAdvancedAPI("YOUR-TOKEN")
 
-result = AnkrAdvancedAPI.get_token_holders_count_history_raw(
+result = advancedAPI.get_token_holders_count_history_raw(
     request=GetTokenHoldersCountRequest(
         blockchain=Blockchain.Eth,
         contractAddress='0xdAC17F958D2ee523a2206206994597C13D831ec7',
@@ -394,12 +394,12 @@ print(result)
 Get token price by contract.
 
 ```python3
-from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr import AnkrAdvancedAPI
 from ankr.types import Blockchain, GetTokenPriceRequest
 
-ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+advancedAPI = AnkrAdvancedAPI("YOUR-TOKEN")
 
-result = AnkrAdvancedAPI.get_token_price(
+result = advancedAPI.get_token_price(
     request=GetTokenPriceRequest(
         blockchain=Blockchain.Eth,
         contractAddress='',
@@ -414,12 +414,12 @@ print(result)
 Get token transfers of specified address.
 
 ```python3
-from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr import AnkrAdvancedAPI
 from ankr.types import Blockchain, GetTransfersRequest
 
-ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+advancedAPI = AnkrAdvancedAPI("YOUR-TOKEN")
 
-result = AnkrAdvancedAPI.get_token_transfers(
+result = advancedAPI.get_token_transfers(
     request=GetTransfersRequest(
         blockchain=Blockchain.Eth,
         address=['0xf16e9b0d03470827a95cdfd0cb8a8a3b46969b91'],
@@ -440,12 +440,12 @@ for transfer in result:
 Get data about all the NFTs (collectibles) owned by a wallet.
 
 ```python3
-from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr import AnkrAdvancedAPI
 from ankr.types import Blockchain, GetNFTsByOwnerRequest
 
-ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+advancedAPI = AnkrAdvancedAPI("YOUR-TOKEN")
 
-result = AnkrAdvancedAPI.get_nfts_raw(
+result = advancedAPI.get_nfts(
     request=GetNFTsByOwnerRequest(
         blockchain=Blockchain.Eth,
         walletAddress='0x0E11A192d574b342C51be9e306694C41547185DD',
@@ -461,12 +461,12 @@ for nft in result:
 Get NFT's contract metadata.
 
 ```python3
-from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr import AnkrAdvancedAPI
 from ankr.types import Blockchain, GetNFTMetadataRequest
 
-ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+advancedAPI = AnkrAdvancedAPI("YOUR-TOKEN")
 
-reply = AnkrAdvancedAPI.get_nft_metadata(
+reply = advancedAPI.get_nft_metadata(
     request=GetNFTMetadataRequest(
         blockchain=Blockchain.Eth,
         contractAddress='0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d',
@@ -484,12 +484,12 @@ print(reply.attributes)
 Get NFT's holders.
 
 ```python3
-from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr import AnkrAdvancedAPI
 from ankr.types import Blockchain, GetNFTHoldersRequest
 
-ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+advancedAPI = AnkrAdvancedAPI("YOUR-TOKEN")
 
-result = AnkrAdvancedAPI.get_nft_holders(
+result = advancedAPI.get_nft_holders(
     request=GetNFTHoldersRequest(
         blockchain=Blockchain.Arbitrum,
         contractAddress='0xc36442b4a4522e871399cd717abdd847ab11fe88',
@@ -506,12 +506,12 @@ for holder in result:
 Get NFT Transfers of specified address.
 
 ```python3
-from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr import AnkrAdvancedAPI
 from ankr.types import Blockchain, GetTransfersRequest
 
-ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+advancedAPI = AnkrAdvancedAPI("YOUR-TOKEN")
 
-result = AnkrAdvancedAPI.get_nft_transfers(
+result = advancedAPI.get_nft_transfers(
     request=GetTransfersRequest(
         blockchain=[Blockchain.Eth, Blockchain.Bsc],
         address=['0xd8da6bf26964af9d7eed9e03e53415d37aa96045'],
@@ -531,12 +531,12 @@ for transfer in result:
 Get logs matching the filter.
 
 ```python3
-from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr import AnkrAdvancedAPI
 from ankr.types import Blockchain, GetLogsRequest
 
-ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+advancedAPI = AnkrAdvancedAPI("YOUR-TOKEN")
 
-result = AnkrAdvancedAPI.get_logs(
+result = advancedAPI.get_logs(
     request=GetLogsRequest(
         blockchain=[Blockchain.Eth],
         fromBlock=1181739,
@@ -560,12 +560,12 @@ for log in result:
 Query data about blocks within a specified range.
 
 ```python3
-from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr import AnkrAdvancedAPI
 from ankr.types import Blockchain, GetBlocksRequest
 
-ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+advancedAPI = AnkrAdvancedAPI("YOUR-TOKEN")
 
-result = AnkrAdvancedAPI.get_blocks(
+result = advancedAPI.get_blocks(
     request=GetBlocksRequest(
         blockchain=Blockchain.Eth,
         fromBlock=14500001,
@@ -586,12 +586,12 @@ for block in result:
 Query data about transaction by the transaction hash.
 
 ```python3
-from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr import AnkrAdvancedAPI
 from ankr.types import GetTransactionsByHashRequest
 
-ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+advancedAPI = AnkrAdvancedAPI("YOUR-TOKEN")
 
-result = AnkrAdvancedAPI.get_transaction(
+result = advancedAPI.get_transaction(
     request=GetTransactionsByHashRequest(
         transactionHash='0x82c13aaac6f0b6471afb94a3a64ae89d45baa3608ad397621dbb0d847f51196f',
         decodeTxData=True
@@ -606,12 +606,12 @@ print(result)
 Query data about transactions of specified address.
 
 ```python3
-from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr import AnkrAdvancedAPI
 from ankr.types import Blockchain, GetTransactionsByAddressRequest
 
-ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+advancedAPI = AnkrAdvancedAPI("YOUR-TOKEN")
 
-result = AnkrAdvancedAPI.get_transactions_by_address(
+result = advancedAPI.get_transactions_by_address(
     request=GetTransactionsByAddressRequest(
         blockchain=Blockchain.Bsc,
         fromBlock=23593283,
@@ -629,15 +629,15 @@ for transaction in result:
 
 #### `get_blockchain_stats` / `get_blockchain_stats_raw`
 
-Returns blockchain stats (num of txs, etc).
+Returns blockchain stats (num of txs, etc.).
 
 ```python3
-from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr import AnkrAdvancedAPI
 from ankr.types import Blockchain, GetBlockchainStatsRequest
 
-ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+advancedAPI = AnkrAdvancedAPI("YOUR-TOKEN")
 
-result = AnkrAdvancedAPI.get_blockchain_stats_raw(
+result = advancedAPI.get_blockchain_stats(
     request=GetBlockchainStatsRequest(
         blockchain=Blockchain.Bsc,
     )
@@ -652,12 +652,12 @@ for stat in result:
 Returns on which chain address was interacting.
 
 ```python3
-from ankr import AnkrAdvancedAPI, AnkrWeb3
+from ankr import AnkrAdvancedAPI
 from ankr.types import GetInteractionsRequest
 
-ankr_w3 = AnkrWeb3("YOUR-TOKEN")
+advancedAPI = AnkrAdvancedAPI("YOUR-TOKEN")
 
-result = AnkrAdvancedAPI.get_interactions(
+result = advancedAPI.get_interactions(
     request=GetInteractionsRequest(
         address='0xF977814e90dA44bFA03b6295A0616a897441aceC',
     )
