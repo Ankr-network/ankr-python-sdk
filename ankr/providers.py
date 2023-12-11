@@ -1,19 +1,12 @@
 from __future__ import annotations
 
-from typing import Any, Iterable, List, Optional, Type, TypeVar, Union
+from typing import Any, Iterable, List, Optional, Type, Union
 
 from eth_typing import URI
 from typing_extensions import Protocol
 from web3 import HTTPProvider
 from web3.types import RPCEndpoint, RPCResponse
-
-from ankr import types
 from ankr.exceptions import APIError
-
-TRequest = TypeVar("TRequest", bound=types.RPCModel)
-TReply = TypeVar("TReply")
-TRequestPaginated = TypeVar("TRequestPaginated", bound=types.RPCRequestPaginated)
-TReplyPaginated = TypeVar("TReplyPaginated", bound=types.RPCReplyPaginated)
 
 
 class MultichainHTTPProvider(HTTPProvider):
@@ -27,8 +20,26 @@ class MultichainHTTPProvider(HTTPProvider):
         endpoint_uri = endpoint_uri or "https://rpc.ankr.com/multichain/"
         super().__init__(endpoint_uri + api_key, request_kwargs, session)
 
+    def clean_nones(self, value):
+        """
+        Recursively remove all None values from dictionaries and lists, and returns
+        the result as a new dictionary or list.
+        """
+        if isinstance(value, list):
+            return [self.clean_nones(x) for x in value if x is not None]
+        elif isinstance(value, dict):
+            return {
+                key: self.clean_nones(val)
+                for key, val in value.items()
+                if val is not None
+            }
+        else:
+            return value
+
     def make_request(self, method: RPCEndpoint, params: Any) -> RPCResponse:
-        response = super().make_request(method, params)
+        response = super().make_request(
+            method, self.clean_nones(params.to_dict().copy())
+        )
         if response.get("error"):
             raise APIError(response["error"])
         if "result" not in response:
@@ -38,29 +49,27 @@ class MultichainHTTPProvider(HTTPProvider):
     def call_method(
         self,
         rpc: str,
-        request: TRequest,
-        reply_type: Type[TReply],
-    ) -> TReply:
-        request_dict = request.dict(by_alias=True, exclude_none=True)
-        response = self.make_request(RPCEndpoint(rpc), request_dict)
-        reply = reply_type(**response["result"])
+        request: Any,
+        reply: Any,
+    ) -> Any:
+        response = self.make_request(RPCEndpoint(rpc), request)
+        reply = reply.from_dict(**response["result"])
         return reply
 
     def call_method_paginated(
         self,
         *,
         rpc: str,
-        request: TRequestPaginated,
-        reply_type: Type[TReplyPaginated],
+        request: Any,
+        reply: Any,
         iterable_name: str,
-        iterable_type: Type[TReply],
+        iterable_type: Type[Any],
         limit: Optional[int] = None,
-    ) -> Iterable[TReply]:
-        request_dict = request.dict(by_alias=True, exclude_none=True)
-        response = self.make_request(RPCEndpoint(rpc), request_dict)
-        reply = reply_type(**response["result"])
+    ) -> Iterable[Any]:
+        response = self.make_request(RPCEndpoint(rpc), request)
+        reply = reply.from_dict(**response["result"])
 
-        items: List[TReply] = getattr(reply, iterable_name) or []
+        items: List[Any] = getattr(reply, iterable_name) or []
 
         if limit:
             if limit <= len(items):
@@ -70,12 +79,12 @@ class MultichainHTTPProvider(HTTPProvider):
 
         yield from items
 
-        if reply.next_page_token:
-            request.page_token = reply.next_page_token
+        if reply.nextPageToken:
+            request.pageToken = reply.nextPageToken
             yield from self.call_method_paginated(
                 rpc=RPCEndpoint(rpc),
                 request=request,
-                reply_type=reply_type,
+                reply=reply,
                 iterable_name=iterable_name,
                 iterable_type=iterable_type,
                 limit=limit,
