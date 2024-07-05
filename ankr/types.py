@@ -2272,3 +2272,4 @@ class Blockchain(Enum):
     Syscoin = "syscoin"
     Telos = "telos"
     Xai = "xai"
+    Xlayer = "xlayer"

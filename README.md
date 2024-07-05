@@ -109,6 +109,7 @@ Mainnet
 - Scroll: `"scroll"`
 - Linea: `"linea"`
 - Xai: `"xai"`
+- Xlayer: `"xlayer"`
 - Telos: `"telos"`
 
 Testnet
