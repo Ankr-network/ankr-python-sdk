@@ -107,6 +107,7 @@ Mainnet
 - Flare: `"flare"`
 - Gnosis Chain: `"gnosis"`
 - Scroll: `"scroll"`
+- Stellar: `"stellar"`
 - Linea: `"linea"`
 - Xai: `"xai"`
 - Xlayer: `"xlayer"`
@@ -118,19 +119,15 @@ Testnet
 - Ethereum Holesky: `"eth_holesky"`
 - Avalanche Fuji: `"avalanche_fuji"`
 - Polygon Amoy: `"polygon_amoy"`
-- Optimism Testnet: `"optimism_testnet"`
+- Optimism Sepolia: `"optimism_sepolia"`
 - Base Sepolia: `"base_sepolia"`
-
-Appchain
-
-- META Apes: `"bas_metaapes"`
+- Neura Devnet `"neura_devnet"`
+- Neura Testnet `"neura_testnet_v1"`
 
 Appchain Testnet
 
-- META Apes Testnet: `"bas_metaapes_testnet"`
-- Neura Devnet `"neura_devnet"`
-- Neura Testnet `"neura_testnet_v1"`
-- Incentiv Devnet `"incentiv_devnet"`
+- Incentiv Devnet `"incentiv_devnet_v3"`
+- Incentiv Testnet `"incentiv_testnet"`
 
 When passing blockchain, you can use one available from `types.py` (preferred) or just a string value.  
 
@@ -141,9 +138,6 @@ When passing blockchain, you can use one available from `types.py` (preferred) o
 Early Access
 
 - [`get_token_price_history`](#gettokenpricehistory--gettokenpricehistoryraw)
-- [`get_account_balance_historical`](#getaccountbalancehistorical--getaccountbalancehistoricalraw)
-- [`get_internal_transactions_by_block_number`](#getinternaltransactionsbyblocknumber--getinternaltransactionsbyblocknumberraw)
-- [`get_internal_transactions_by_parent_hash`](#getinternaltransactionsbyparenthash--getinternaltransactionsbyparenthashraw)
 
 Token API
 
@@ -208,68 +202,6 @@ result = advancedAPI.get_token_price_history(
 print(result)
 ```
 
-#### `get_account_balance_historical` / `get_account_balance_historical_raw`
-
-Get the coin and token balances of the wallet at specified block.
-
-```python3
-from ankr import AnkrAdvancedAPI
-from ankr.types import Blockchain, GetAccountBalanceHistoricalRequest
-
-advancedAPI = AnkrAdvancedAPI("YOUR-TOKEN")
-
-result = advancedAPI.get_account_balance_historical(
-    request=GetAccountBalanceHistoricalRequest(
-        blockchain=Blockchain.Eth,
-        walletAddress='vitalik.eth',
-        onlyWhitelisted=False,
-        blockHeight=17967813,
-    )
-)
-print(result)
-```
-
-#### `get_internal_transactions_by_block_number` / `get_internal_transactions_by_block_number_raw`
-
-Get a list of internal transactions in the block.
-
-```python3
-from ankr import AnkrAdvancedAPI
-from ankr.types import Blockchain, GetInternalTransactionsByBlockNumberRequest
-
-advancedAPI = AnkrAdvancedAPI("YOUR-TOKEN")
-
-result = advancedAPI.get_internal_transactions_by_block_number(
-    request=GetInternalTransactionsByBlockNumberRequest(
-        blockchain=Blockchain.Eth,
-        blockNumber=10000000,
-        onlyWithValue=True,
-    )
-)
-for transaction in result:
-    print(transaction)
-```
-
-#### `get_internal_transactions_by_parent_hash` / `get_internal_transactions_by_parent_hash_raw`
-
-Get a list of internal transactions in the transaction.
-
-```python3
-from ankr import AnkrAdvancedAPI
-from ankr.types import Blockchain, GetInternalTransactionsByParentHashRequest
-
-advancedAPI = AnkrAdvancedAPI("YOUR-TOKEN")
-
-result = advancedAPI.get_internal_transactions_by_parent_hash(
-    request=GetInternalTransactionsByParentHashRequest(
-        blockchain=Blockchain.Eth,
-        parentTransactionHash='0xa50f8744e65cb76f66f9d54499d5401866a75d93db2e784952f55205afc3acc5',
-        onlyWithValue=True,
-    )
-)
-for transaction in result:
-    print(transaction)
-```
 
 ### Token API
 
