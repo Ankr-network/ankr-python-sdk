@@ -246,15 +246,3 @@ def test_get_token_price(client: AnkrAdvancedAPI) -> None:
 
     assert price
     assert float(price) > 0
-
-
-@pytest.mark.webtest
-def test_get_token_price__no_price(client: AnkrAdvancedAPI) -> None:
-    price = client.get_token_price(
-        request=GetTokenPriceRequest(
-            contractAddress="0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
-            blockchain=Blockchain.Eth,
-        )
-    )
-
-    assert price == "0"

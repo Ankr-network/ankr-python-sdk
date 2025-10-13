@@ -2013,238 +2013,6 @@ class ExplainTokenPriceReply:
         )
 
 
-class GetInternalTransactionsByParentHashRequest:
-    def __init__(
-        self,
-        blockchain: Blockchain,
-        onlyWithValue: bool,
-        parentTransactionHash: str,
-        syncCheck: bool = None,
-    ):
-        self.blockchain = blockchain
-        self.onlyWithValue = onlyWithValue
-        self.parentTransactionHash = parentTransactionHash
-        self.syncCheck = syncCheck
-
-    def to_dict(self):
-        if isinstance(self.blockchain, str):
-            blockchain_value = self.blockchain
-        elif isinstance(self.blockchain, list):
-            blockchain_value = [
-                block.value if isinstance(block, Blockchain) else block
-                for block in self.blockchain
-            ]
-        elif self.blockchain is not None:
-            blockchain_value = self.blockchain.value
-        else:
-            blockchain_value = None
-        return {
-            "blockchain": blockchain_value,
-            "onlyWithValue": self.onlyWithValue,
-            "parentTransactionHash": self.parentTransactionHash,
-            "syncCheck": self.syncCheck,
-        }
-
-
-class GetInternalTransactionsByBlockNumberRequest:
-    def __init__(
-        self,
-        blockNumber: float,
-        blockchain: Blockchain,
-        onlyWithValue: bool,
-        syncCheck: bool = None,
-    ):
-        self.blockNumber = blockNumber
-        self.blockchain = blockchain
-        self.onlyWithValue = onlyWithValue
-        self.syncCheck = syncCheck
-
-    def to_dict(self):
-        if isinstance(self.blockchain, str):
-            blockchain_value = self.blockchain
-        elif isinstance(self.blockchain, list):
-            blockchain_value = [
-                block.value if isinstance(block, Blockchain) else block
-                for block in self.blockchain
-            ]
-        elif self.blockchain is not None:
-            blockchain_value = self.blockchain.value
-        else:
-            blockchain_value = None
-        return {
-            "blockNumber": self.blockNumber,
-            "blockchain": blockchain_value,
-            "onlyWithValue": self.onlyWithValue,
-            "syncCheck": self.syncCheck,
-        }
-
-
-class InternalTransaction:
-    def __init__(
-        self,
-        blockHash: str,
-        blockHeight: float,
-        blockchain: Blockchain,
-        callType: str,
-        fromAddress: str,
-        gas: float,
-        gasUsed: float,
-        input: str,
-        output: str,
-        timestamp: str,
-        toAddress: str,
-        transactionHash: str,
-        transactionIndex: float,
-        value: str,
-        callPath: str = None,
-        callStack: List[float] = None,
-        error: str = None,
-        contractAddress: str = None,
-    ):
-        self.blockHash = blockHash
-        self.blockHeight = blockHeight
-        self.blockchain = blockchain
-        self.callType = callType
-        self.fromAddress = fromAddress
-        self.gas = gas
-        self.gasUsed = gasUsed
-        self.input = input
-        self.output = output
-        self.timestamp = timestamp
-        self.toAddress = toAddress
-        self.transactionHash = transactionHash
-        self.transactionIndex = transactionIndex
-        self.value = value
-        self.callPath = callPath
-        self.callStack = callStack
-        self.error = error
-        self.contractAddress = contractAddress
-
-    @classmethod
-    def from_dict(cls, **data):
-        return cls(
-            blockHash=data.get("blockHash"),
-            blockHeight=data.get("blockHeight"),
-            blockchain=Blockchain(data.get("blockchain")),
-            callType=data.get("callType"),
-            fromAddress=data.get("fromAddress"),
-            gas=data.get("gas"),
-            gasUsed=data.get("gasUsed"),
-            input=data.get("input"),
-            output=data.get("output"),
-            timestamp=data.get("timestamp"),
-            toAddress=data.get("toAddress"),
-            transactionHash=data.get("transactionHash"),
-            transactionIndex=data.get("transactionIndex"),
-            value=data.get("value"),
-            callPath=data.get("callPath"),
-            callStack=data.get("callStack"),
-            error=data.get("error"),
-            contractAddress=data.get("contractAddress"),
-        )
-
-
-class GetInternalTransactionsReply:
-    def __init__(
-        self, internalTransactions: List[InternalTransaction], nextPageToken: str = None
-    ):
-        self.internalTransactions = internalTransactions
-        self.nextPageToken = nextPageToken
-
-    @classmethod
-    def from_dict(cls, **data):
-        return cls(
-            internalTransactions=[
-                InternalTransaction.from_dict(**internaltransaction_data)
-                for internaltransaction_data in data.get("internalTransactions", [])
-            ],
-            nextPageToken=data.get("nextPageToken"),
-        )
-
-
-class GetAccountBalanceHistoricalRequest:
-    def __init__(
-        self,
-        walletAddress: str,
-        blockchain: Blockchain | List[Blockchain] = None,
-        onlyWhitelisted: bool = None,
-        nativeFirst: bool = None,
-        pageToken: str = None,
-        pageSize: float = None,
-        blockHeight: float
-        | Literal[Literal["latest"]]
-        | Literal[Literal["earliest"]] = None,
-        syncCheck: bool = None,
-    ):
-        self.walletAddress = walletAddress
-        self.blockchain = blockchain
-        self.onlyWhitelisted = onlyWhitelisted
-        self.nativeFirst = nativeFirst
-        self.pageToken = pageToken
-        self.pageSize = pageSize
-        self.blockHeight = blockHeight
-        self.syncCheck = syncCheck
-
-    def to_dict(self):
-        if isinstance(self.blockchain, str):
-            blockchain_value = self.blockchain
-        elif isinstance(self.blockchain, list):
-            blockchain_value = [
-                block.value if isinstance(block, Blockchain) else block
-                for block in self.blockchain
-            ]
-        elif self.blockchain is not None:
-            blockchain_value = self.blockchain.value
-        else:
-            blockchain_value = None
-        return {
-            "walletAddress": self.walletAddress,
-            "blockchain": blockchain_value,
-            "onlyWhitelisted": self.onlyWhitelisted,
-            "nativeFirst": self.nativeFirst,
-            "pageToken": self.pageToken,
-            "pageSize": self.pageSize,
-            "blockHeight": self.blockHeight,
-            "syncCheck": self.syncCheck,
-        }
-
-
-class GetAccountBalanceHistoricalReply:
-    def __init__(
-        self,
-        assets: List[Balance],
-        totalBalanceUsd: str,
-        totalCount: float,
-        nextPageToken: str = None,
-        syncStatus: SyncStatus = None,
-        blockHeight: float
-        | Literal[Literal["latest"]]
-        | Literal[Literal["earliest"]] = None,
-    ):
-        self.assets = assets
-        self.totalBalanceUsd = totalBalanceUsd
-        self.totalCount = totalCount
-        self.nextPageToken = nextPageToken
-        self.syncStatus = syncStatus
-        self.blockHeight = blockHeight
-
-    @classmethod
-    def from_dict(cls, **data):
-        return cls(
-            assets=[
-                Balance.from_dict(**balance_data)
-                for balance_data in data.get("assets", [])
-            ],
-            totalBalanceUsd=data.get("totalBalanceUsd"),
-            totalCount=data.get("totalCount"),
-            nextPageToken=data.get("nextPageToken"),
-            syncStatus=SyncStatus.from_dict(**data.get("syncStatus"))
-            if data.get("syncStatus") is not None
-            else None,
-            blockHeight=data.get("blockHeight"),
-        )
-
-
 class Blockchain(Enum):
     Arbitrum = "arbitrum"
     Avalanche = "avalanche"
@@ -2258,17 +2026,19 @@ class Blockchain(Enum):
     Fantom = "fantom"
     Flare = "flare"
     Gnosis = "gnosis"
-    Incentiv_devnet = "incentiv_devnet"
+    Incentiv_devnet_v3 = "incentiv_devnet_v3"
+    Incentiv_testnet = "incentiv_testnet"
     Linea = "linea"
     Neura_devnet = "neura_devnet"
     Neura_testnet_v1 = "neura_testnet_v1"
     Optimism = "optimism"
-    Optimism_testnet = "optimism_testnet"
+    Optimism_sepolia = "optimism_sepolia"
     Polygon = "polygon"
     Polygon_amoy = "polygon_amoy"
     Polygon_zkevm = "polygon_zkevm"
     Rollux = "rollux"
     Scroll = "scroll"
+    Stellar = "stellar"
     Syscoin = "syscoin"
     Telos = "telos"
     Xai = "xai"
